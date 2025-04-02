@@ -42,13 +42,18 @@ header .buttons {
     gap: 10px;
 }
 
-button {
+header .buttons a {
     height: 40px;
     width: 100px;
     border-radius: 10px;
     border-style: none;
     background-color: #2f3033;
     color: white;
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+    text-decoration: none;
 }
 
 
@@ -68,11 +73,13 @@ button {
 #signup:hover,
 #signup:focus {
     background-color: #99b7e7;
+    cursor: pointer;
 }
 
 #signin:hover,
 #signin:focus {
     background-color: #393a3d;
+    cursor: pointer;
 }
 
 #logo {
@@ -195,6 +202,16 @@ button {
     padding-left: min(10%, 25px);
     padding-right: 10%;
     font-size: 16px;
+}
+
+button {
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #2f3033;
+    color: white;
+    cursor: pointer;
 }
 
 #main button {
@@ -430,7 +447,7 @@ button {
 }
 
 #presentation li {
-    list-style-image: url(../check.svg);
+    list-style-image: url(../images/check.svg);
     line-height: 40px;
 }
 

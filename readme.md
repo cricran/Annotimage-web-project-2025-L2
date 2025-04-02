@@ -22,3 +22,13 @@ Il est necessaire d'activer le module appache `mod_rewrite` qui est utilisé pou
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
+
+L'extention GD doit aussi être activer si ce n'est pas le cas. Vérification avec
+```bash
+php -m | grep gd
+```
+Si GD n'est pas activé, installez-le :
+```bash
+sudo apt install php-gd
+sudo systemctl restart apache2
+```

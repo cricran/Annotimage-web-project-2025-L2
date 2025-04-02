@@ -1,15 +1,15 @@
 <?php
 
-require_once 'models.php';
-require_once 'controllers.php';
-require_once 'debug.php';
+require_once __DIR__ . '/../models.php';
+require_once __DIR__ . '/../controllers.php';
+require_once __DIR__ . '/../debug.php';
 
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if ($request == '/index.php' || $request == '/') {
     home();
-} elseif ($request == 'test/toto') {
-    echo "Affichage d'un tototoot";
+} elseif ($request == '/index.php/signup') {
+    signin();
 } elseif ($request == 'billet') {
     echo "Affichage d'un billet";
 } else {

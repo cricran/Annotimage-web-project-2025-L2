@@ -10,20 +10,20 @@
 
 <body>
     <header>
-        <img id="logo" src="../static/images/logo.png" alt="logo" onclick="window.location.href='index.html'">
+        <img id="logo" src="../static/images/logo.png" alt="logo" onclick="window.location.href='index.php'">
         <form action="/html/search.html" id="searchBarTop">
             <input type="search" placeholder="Images, #tags, @utilisateurs">
         </form>
 
         <div class="buttons">
-            <button id="signup">S'inscrire</button>
-            <button id="signin" onclick="window.location.href='connect.html'"></button>
+            <a id="signup" href="index.php/signup">S'inscrire</a>
+            <a id="signin"></a>
         </div>
     </header>
 
 
     <section id="main">
-        <h1>Téléversez et Annotez vos images</h1>
+        <h1>Téléversez et Annotez vos images</h1>                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
         <form action="/html/search.html">
             <input type="search" placeholder="Images, #tags, @utilisateurs">
@@ -40,7 +40,7 @@
         <div class="row">
             <div class="column">
                 <article>
-                    <img src="../images/public/1.webp" alt="image" id="img1">
+                    <img src="image.php?image=1.png" alt="image" id="img1">
                     <h2>
                         Une image du film Dune (2021)
                     </h2>
