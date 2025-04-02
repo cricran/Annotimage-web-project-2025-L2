@@ -1,9 +1,3 @@
----
-title: "Rapport de projet"
-format: html
-index: true
----
-
 # Application web de gestion et d'annotation d'images et de photos
 L2 Info : Language Web
 Tristan GROULT TP1
