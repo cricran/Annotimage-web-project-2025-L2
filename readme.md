@@ -17,11 +17,11 @@ Tristan GROULT TP1
 ---
 
 ## Configuration necessaire
-Il est necessaire d'activer le module appache `mod_rewrite` qui est utilisé pour réécrire les URLs proprement et donc cacher les choix d'implémentations et de technologie utilisé. Ce module peut être activer (neccessite un redémarage de la config apache2) avec :
+<!-- Il est necessaire d'activer le module appache `mod_rewrite` qui est utilisé pour réécrire les URLs proprement et donc cacher les choix d'implémentations et de technologie utilisé. Ce module peut être activer (neccessite un redémarage de la config apache2) avec :
 ```bash
 sudo a2enmod rewrite
 sudo systemctl restart apache2
-```
+``` -->
 
 L'extention GD doit aussi être activer si ce n'est pas le cas. Vérification avec
 ```bash
