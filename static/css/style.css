@@ -1,0 +1,706 @@
+@font-face {
+    font-family: moto;
+    src: url(../fonts/NotoSans-VariableFont_wdth\,wght.ttf);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    background-color: #131314;
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-family: moto, monospace;
+}
+
+/* Header */
+
+header {
+    background-color: #1e1f20;
+    height: 70px;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 999;
+}
+
+header img {
+    height: 20px;
+}
+
+header .buttons {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    border-style: none;
+    background-color: #2f3033;
+    color: white;
+}
+
+
+
+
+#signup {
+    background-color: #a8c7fa;
+    color: black;
+}
+
+#signin::before {
+    content: "Se connecter";
+}
+
+
+
+#signup:hover,
+#signup:focus {
+    background-color: #99b7e7;
+}
+
+#signin:hover,
+#signin:focus {
+    background-color: #393a3d;
+}
+
+#logo {
+    content: url(../images/logo.png) / "logo";
+
+}
+
+#searchBarTop input {
+    width: 100%;
+    height: 40px;
+    border-radius: 100px;
+    border-style: none;
+    background-color: #2f3033;
+    color: white;
+    padding-left: min(10%, 25px);
+    padding-right: 10%;
+}
+
+
+
+@media (orientation: landscape) {
+    #searchBarTop input {
+        width: 180%;
+    }
+}
+
+#searchBarTop {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+#searchBarTop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+@media (orientation: portrait) {
+    #logo {
+        content: url(../images/logo_min.png) / "logo";
+
+    }
+
+    #signin {
+        width: 40px;
+        background-size: 70%;
+        background-image: url(../images/login.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    #signin::before {
+        content: "";
+    }
+
+    #signin::after {
+        content: "";
+    }
+
+    #signup {
+        width: 70px;
+    }
+}
+
+
+
+/* Main */
+
+#main {
+    background-image: url(../images/bg.jpg);
+    background-size: cover;
+    /*height: 500px;*/
+    padding: 50px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-bottom: min(25%, 100px);
+    padding-top: 8%;
+}
+
+#main::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, rgba(19, 19, 20, 0), rgba(19, 19, 20, 1));
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#main h1 {
+    text-shadow: 0 6px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin: 0;
+    text-align: center;
+    font-size: 170%;
+}
+
+@media (orientation: landscape) {
+    #main h1 {
+        font-size: 400%;
+    }
+}
+
+#main input[type="search"] {
+    margin-top: 10%;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.08);
+    width: 70vw;
+    height: 50px;
+    border-radius: 100px;
+    border-style: none;
+    background-color: #2f3033;
+    color: white;
+    padding-left: min(10%, 25px);
+    padding-right: 10%;
+    font-size: 16px;
+}
+
+#main button {
+    margin-top: 5%;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 30px 0px 30px 0px;
+    min-width: 50%;
+    border-radius: 500px;
+    background-color: #1bb76e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100%;
+}
+
+#main button:focus,
+#main button:hover {
+    background-color: #1bbe72;
+    scale: 101%;
+}
+
+#main button img {
+    margin-left: 10px;
+}
+
+/* Image grid */
+/*
+#image_grid {
+    margin-top: 90px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+    padding: 20px;
+}
+*/
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    padding: 20px;
+}
+
+.column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+    height: 100%;
+}
+
+.column article {
+    margin-top: 8px;
+    vertical-align: middle;
+    width: 100%;
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 950px) {
+    .column {
+        flex: 50%;
+        max-width: 50%;
+    }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .column {
+        flex: 100%;
+        max-width: 100%;
+    }
+}
+
+
+
+
+
+
+#image_grid article {
+    background-color: #2f3033;
+    /*margin: 10px;*/
+    padding: 27px 7px 7px 8px;
+    border-radius: 20px;
+    /*min-width: 300px;*/
+    /*max-width: 30%;*/
+    text-align: center;
+
+}
+
+#image_grid article:hover,
+#image_grid article:focus {
+    background-color: #383a3d;
+    scale: 101%;
+}
+
+#image_grid p {
+    margin: 0 15px 0px 15px;
+    opacity: 50%;
+    text-align: center;
+    overflow: auto;
+    max-width: 90%;
+}
+
+#image_grid a {
+    color: white;
+    text-decoration: none;
+}
+
+#image_grid article h2 {
+    margin-top: 20px;
+    text-align: center;
+    padding: 3%;
+    max-width: 100%;
+    display: inline-block;
+    font-size: 19px;
+}
+
+#image_grid img {
+    display: block;
+    margin: auto;
+    max-width: 90%;
+    border-radius: 10px;
+    min-width: 80%;
+}
+
+#image_grid>h2 {
+    margin-top: 40px;
+    text-align: center;
+}
+
+
+
+#showImg1 {
+    width: 80%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #1e1f20;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#showImg1 img {
+    width: min(100%, 500px);
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+/*login presentation */
+
+#content {
+    display: flex;
+    flex-direction: row;
+    align-content: space-around;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    padding: 50px 0px 50px 0px;
+
+}
+
+#login {
+    margin: 40px;
+    min-width: 270px;
+    width: max(35%, 400px);
+    background-color: #1e1f20;
+    padding: max(5%, 40px);
+    border-radius: 10px;
+    box-shadow: 0 6px 60px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+#login a {
+    color: white;
+}
+
+#login>a {
+    float: right;
+    margin: -12%;
+}
+
+#login h2 {
+    font-size: 32px;
+    margin: 0;
+}
+
+#login input {
+    width: 100%;
+    height: 40px;
+    margin: 5px 0;
+    background-color: #2f3033;
+    border: none;
+    padding: 15px;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px
+}
+
+#login p {
+    margin: 40px 0px;
+    text-align: right;
+    font-size: 13px;
+}
+
+#login button {
+    background-color: #a8c7fa;
+    color: black;
+    width: 100%;
+    margin-top: 30px;
+}
+
+#presentation {
+    margin: 15px;
+    margin-left: 10%;
+    min-width: 320px;
+    width: 20%;
+}
+
+#presentation h2 {
+    font-size: 38px;
+}
+
+#presentation li {
+    list-style-image: url(../check.svg);
+    line-height: 40px;
+}
+
+/* Upload page */
+
+#upload {
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 90%;
+    background-color: #1e1f20;
+    padding: max(5%, 40px);
+    border-radius: 10px;
+    box-shadow: 0 6px 60px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
+    color: white;
+
+}
+
+#upload #form {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+#upload input,
+select,
+span {
+    width: 100%;
+    height: 40px;
+    margin: 5px 0;
+    background-color: #2f3033;
+    border: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+#upload input[type="file"] {
+    height: 80px;
+}
+
+#upload input[type="submit"] {
+    margin-top: 30px;
+    background-color: #a8c7fa;
+    color: black;
+}
+
+#upload input[type=file]::file-selector-button {
+    width: 50%;
+    background-color: transparent;
+    color: white;
+    border: none;
+    height: 100%;
+}
+
+#upload img {
+    max-height: 300px;
+    max-width: 100%;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}
+
+#upload div form {
+    min-width: 270px;
+    width: max(40%, 400px);
+}
+
+#upload h2 {
+    font-size: 32px;
+    margin: 0;
+    text-align: center;
+}
+
+#selected_tag {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+#selected_tag div {
+    width: 70%;
+    margin: 0;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 5px;
+}
+
+#selected_tag div button {
+    width: 40px;
+    background-color: #ea4335;
+    color: black;
+}
+
+#selected_tag div button img {
+    width: 17px;
+    margin: 0;
+}
+
+#selected_tag div span {
+    vertical-align: middle;
+    margin: 0;
+    display: inline-block;
+    width: calc(100% - 50px);
+    line-height: 40px
+}
+
+#center {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+}
+
+#upload a {
+    position: relative;
+    float: right;
+}
+
+/* User, tag page */
+
+h2 {
+    text-align: left;
+    width: 100%;
+}
+
+#main>img {
+    float: left;
+    width: 200px;
+    margin-top: -5%;
+    color: white;
+}
+
+/* Search page */
+
+#search h1 {
+    text-align: center;
+    font-size: 200%;
+}
+
+#search form {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+#search input[type="search"] {
+    margin-top: 2%;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.08);
+    width: 70vw;
+    height: 50px;
+    border-radius: 100px;
+    border-style: none;
+    background-color: #2f3033;
+    color: white;
+    padding-left: min(10%, 25px);
+    padding-right: 10%;
+    font-size: 16px;
+}
+
+/* annotation page */
+
+#annote {
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 90%;
+    background-color: #1e1f20;
+    padding: max(5%, 40px);
+    border-radius: 10px;
+    box-shadow: 0 6px 60px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+#annote #form {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+#annote input,
+select,
+span {
+    width: 100%;
+    height: 40px;
+    margin: 5px 0;
+    background-color: #2f3033;
+    border: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+#annote input[type="submit"] {
+    margin-top: 30px;
+    background-color: #a8c7fa;
+    color: black;
+}
+
+#annote img {
+    max-height: 300px;
+    max-width: 100%;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#annote div form {
+    min-width: 270px;
+    width: max(40%, 400px);
+}
+
+#annote h2 {
+    font-size: 32px;
+    margin: 0;
+    text-align: center;
+}
+
+#annote a {
+    position: relative;
+    float: right;
+}
+
+#annote_form {
+    width: max(40%, 300px);
+}
+
+#annote_area {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+#annote_area div {
+    width: 70%;
+    margin: 0;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 5px;
+}
+
+#annote_area div button {
+    width: 40px;
+    background-color: #ea4335;
+    color: black;
+}
+
+#annote_area div button img {
+    width: 17px;
+    margin: 0;
+}
+
+#annote_area div input {
+    vertical-align: middle;
+    margin: 0;
+    display: inline-block;
+    width: calc(100% - 50px);
+    line-height: 40px
+}
