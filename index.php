@@ -1,12 +1,15 @@
 <?php
-$uri = trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/");
+$request = trim($_SERVER['REQUEST_URI'], '/');
 
-if ($uri === "") {
-    echo "<html><head><link rel='icon' type='image/png' href='logo.png'><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Annotimage - Home</title></head><body><h1>Page Home</h1></body></html>";
-} elseif ($uri === "test" && isset($_GET["id"])) {
-    echo "<html><body><h1>Page test</h1><p>{$_GET['id']}</p></body></html>";
+// Supprime "index.php" s'il est présent dans l'URL
+$request = preg_replace('/^index\.php\/?/', '', $request);
+
+if ($request == '' || $request == 'accueil') {
+    echo "Page d'accueil";
+} elseif ($request == 'test/toto') {
+    echo "Affichage d'un tototoot";
+} elseif ($request == 'billet') {
+    echo "Affichage d'un billet";
 } else {
-    header("HTTP/1.1 404 Not Found");
-    echo "<html><body><h1>Page introuvable</h1></body></html>";
+    echo "Page non trouvée";
 }
-?>
