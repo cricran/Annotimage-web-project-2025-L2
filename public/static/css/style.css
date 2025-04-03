@@ -84,6 +84,7 @@ header .buttons a {
 
 #logo {
     content: url(../images/logo.png) / "logo";
+    height: 35px;
 
 }
 
@@ -120,7 +121,8 @@ header .buttons a {
 
 @media (orientation: portrait) {
     #logo {
-        content: url(../images/logo_min.png) / "logo";
+        content: url(../images/favicon.png) / "logo";
+        height: 35px;
 
     }
 
@@ -214,7 +216,7 @@ button {
     cursor: pointer;
 }
 
-#main button {
+#main a {
     margin-top: 5%;
     box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
     padding: 30px 0px 30px 0px;
@@ -225,15 +227,19 @@ button {
     align-items: center;
     justify-content: center;
     font-size: 100%;
+    height: 40px;
+    width: 100px;
+    color: white;
+    cursor: pointer;
 }
 
-#main button:focus,
-#main button:hover {
+#main a:focus,
+#main a:hover {
     background-color: #1bbe72;
     scale: 101%;
 }
 
-#main button img {
+#main a img {
     margin-left: 10px;
 }
 
@@ -271,7 +277,6 @@ button {
     width: 100%;
 }
 
-/* Responsive layout - makes a two column-layout instead of four columns */
 @media screen and (max-width: 950px) {
     .column {
         flex: 50%;
@@ -279,7 +284,6 @@ button {
     }
 }
 
-/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
     .column {
         flex: 100%;
@@ -720,4 +724,70 @@ span {
     display: inline-block;
     width: calc(100% - 50px);
     line-height: 40px
+}
+
+/* Notifications */
+
+#notification {
+    position: fixed;
+    z-index: 999;
+    margin-right: 15px;
+    right: 0;
+    width: max(30%, 300px);
+    max-height: 50%;
+    overflow: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+#notification div {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#notification h2 {
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+}
+
+#notification p {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 20px;
+    font-size: 13px;
+}
+
+#notification button {
+    float: right;
+    background-color: transparent;
+    border: none;
+    z-index: 999;
+    width: 35px;
+}
+
+#notification .error {
+    background-color: #ea4335;
+}
+
+#notification .success {
+    background-color: #1bb76e;
+}
+
+#notification .info {
+    background-color: #819ac4;
+}
+
+#notification .warning {
+    background-color: #cfa440;
+}
+
+#notification h2 {
+    margin: 0;
+    padding: 10px;
+    font-size: 20px;
 }

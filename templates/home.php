@@ -1,17 +1,18 @@
 <?php $title = "Annotimage - Acceuille"?>
+<?php $callback = 'index.php' ?>
 
 <?php ob_start() ?>
-    <header>
-        <img id="logo" src="../static/images/logo.png" alt="logo" onclick="window.location.href='index.php'">
-        <form action="/html/search.html" id="searchBarTop">
-            <input type="search" placeholder="Images, #tags, @utilisateurs">
-        </form>
+    
+    <?php include 'navbar.php'?>
 
-        <div class="buttons">
-            <a id="signup" href="index.php/signup">S'inscrire</a>
-            <a id="signin"></a>
+
+    <section id="notification" >
+        <div class="error">
+            <button><img src="../static/images/close.svg" alt="close"></button>
+            <h2>Erreur</h2>
+            <p>Vous devez vous connecter pour continuer</p>
         </div>
-    </header>
+    </section>
 
 
     <section id="main">
@@ -21,10 +22,10 @@
             <input type="search" placeholder="Images, #tags, @utilisateurs">
         </form>
 
-        <button onclick="window.location.href='upload.html'">
+        <a onclick="window.location.href='upload.html'">
             Nouveau post
             <img src="../static/images/upload.svg" alt="upload">
-        </button>
+        </a>
     </section>
     <section id="image_grid">
         <h2>Les images les plus récentes</h2>
