@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php $title = "Annotimage - Acceuille"?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Annotimage</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-</head>
-
-<body>
+<?php ob_start() ?>
     <header>
         <img id="logo" src="../static/images/logo.png" alt="logo" onclick="window.location.href='index.php'">
         <form action="/html/search.html" id="searchBarTop">
@@ -363,6 +355,6 @@
         }
     </style>
 
-</body>
+<?php $content = ob_get_clean() ?>
 
-</html>
+<?php include 'layout.php' ?>

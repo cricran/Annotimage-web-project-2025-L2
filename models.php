@@ -1,10 +1,15 @@
 <?php
-function getImages($name) {
-    header('Content-Type: image/png');
-    $image = imagecreatefrompng('images/public' . $name);
-    imagepng($image);
+
+function connect_db () {
+    include_once 'config.php';
+    
+    $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+    return $db;
 }
 
-// getImages('image1.png');
+function disconnect_db (&$db) {
+    $db = null;
+}
+
 ?>
 
