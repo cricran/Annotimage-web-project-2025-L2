@@ -730,8 +730,9 @@ span {
 
 #notification {
     position: fixed;
-    z-index: 999;
+    z-index: 999999;
     margin-right: 15px;
+    top: 70px;
     right: 0;
     width: max(30%, 300px);
     max-height: 50%;

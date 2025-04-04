@@ -6,15 +6,6 @@
     <?php include 'navbar.php'?>
 
 
-    <section id="notification" >
-        <div class="error">
-            <button><img src="../static/images/close.svg" alt="close"></button>
-            <h2>Erreur</h2>
-            <p>Vous devez vous connecter pour continuer</p>
-        </div>
-    </section>
-
-
     <section id="main">
         <h1>Téléversez et Annotez vos images</h1>                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 

@@ -8,6 +8,8 @@
     <title><?= $title ?></title>
 </head>
 <body>
+    
     <?= $content ?>
+    <?php include "notification.php"?>
 </body>
 </html>
