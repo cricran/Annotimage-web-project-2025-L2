@@ -7,11 +7,6 @@ function home() {
             'type' => 'error',
             'title' => 'Erreur',
             'message' => 'Vous devez vous connecter pour continuer'
-        ],
-        [
-            'type' => 'success',
-            'title' => 'Succès',
-            'message' => 'Votre compte a été créé avec succès'
         ]
     ];
 
