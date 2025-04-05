@@ -7,10 +7,10 @@
     <link rel="icon" type="image/png" href="../static/images/favicon.png">
     <script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../static/js/code.js" defer></script>
-    <title><?= $title ?></title>
+    <title><?php $title ?></title>
 </head>
 <body>
-    
+    <?php echo $_SESSION['user']; ?>
     <?= $content ?>
     <?php include "notification.php"?>
 </body>

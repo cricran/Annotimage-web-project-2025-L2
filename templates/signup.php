@@ -18,10 +18,10 @@
             <h2>S'inscrire</h2>
             <p>Vous avez déjas un compte? <a href="/index.php/signin<?php echo '?callback=' . (isset($_GET['callback']) ? $_GET['callback'] : 'index.php'); ?>">se connecter</a></p>
             <form action="/index.php/signup" method="post">
-                <input type="email" placeholder="email" required autocomplete="email" name="email" maxlength="255">
-                <input type="text" placeholder="pseudo" required autocomplete="username" name="username" maxlength="64">
-                <input type="password" placeholder="mot de passe" required autocomplete="new-password" name="password">
-                <input type="password" placeholder="vérifier votre mot de passe" required autocomplete="new-password" name="password2">
+                <input type="email" placeholder="email" required name="email" maxlength="255">
+                <input type="text" placeholder="pseudo" required name="username" maxlength="64">
+                <input type="password" placeholder="mot de passe" required name="password">
+                <input type="password" placeholder="vérifier votre mot de passe" required name="password2">
                 <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
                 <button type="submit">S'inscrire</button>
             </form>
