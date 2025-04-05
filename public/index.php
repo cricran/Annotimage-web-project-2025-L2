@@ -4,6 +4,8 @@ require_once __DIR__ . '/../models.php';
 require_once __DIR__ . '/../controllers.php';
 require_once __DIR__ . '/../debug.php';
 
+$GLOBALS['notifications'] = [];
+
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 if ($request == '/index.php' || $request == '/') {

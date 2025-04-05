@@ -1,13 +1,13 @@
 <?php
 
+$notif = getNotifications();
 
-
-if (!isset($_SESSION['notification'])){
+if (!isset($notif)){
     return;
 }
 ?>
 <section id="notification" >
-    <?php foreach ($_SESSION['notification'] as $notification): ?>
+    <?php foreach ($notif as $notification): ?>
         
             <div class="<?= $notification['type'] ?>">
                 <button><img src="../static/images/close.svg" alt="close"></button>
@@ -17,6 +17,3 @@ if (!isset($_SESSION['notification'])){
         
     <?php endforeach; ?>
 </section>
-<?php
-unset($_SESSION['notification']);
-?>

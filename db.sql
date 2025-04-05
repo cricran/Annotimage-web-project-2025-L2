@@ -1,6 +1,6 @@
 create table annotimage.user (
 	id int auto_increment primary key,
-	login varchar(64) not null,
+	username varchar(64) not null,
     email varchar(255) not null,
     password varchar(64) not null
 )engine InnoDB;

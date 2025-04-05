@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 
 // Notification
-
 function showNotifications() {
     var notif = $("#notification div");
     notif.toggleClass("show");
@@ -18,7 +17,7 @@ function showNotifications() {
     });
     setTimeout(function () {
         hideNotifications(notif);
-    }, 5000);
+    }, 10000);
 }
 
 function hideNotifications(notif) {
