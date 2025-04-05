@@ -18,6 +18,8 @@ if ($request == '/index.php' || $request == '/') {
     settings();
 } elseif ($request == '/index.php/profile') {
     profile();
+} elseif ($request == '/index.php/upload') {
+    upload();
 } else {
     header('HTTP/1.1 404 Not Found');
     echo '<html><body><h1>Page introuvable</h1></body></html>';

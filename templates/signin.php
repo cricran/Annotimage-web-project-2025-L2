@@ -3,7 +3,7 @@
 <?php ob_start() ?>
     <div id="content">
         <section id="presentation">
-            <img src="../static/images/favicon.png" alt="logo" height="50px">
+            <img src="../static/images/favicon.png" alt="logo" height="50">
             <h2>Bienvenue sur Annotimage</h2>
             <ul>
                 <li>Téléversser vos images</li>
@@ -19,7 +19,7 @@
             <p>Vous n'avez pas de compte? <a href="/index.php/signup<?php echo '?callback=' . (isset($_GET['callback']) ? $_GET['callback'] : 'index.php'); ?>">s'inscrire</a></p>
             <form action="/index.php/signin" method="POST">
                 <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
-                <input type="email_pseudo" placeholder="email ou pseudo" required name="email_pseudo">
+                <input type="text" placeholder="email ou pseudo" required name="email_pseudo">
                 <input type="password" placeholder="mot de passe" required name="password">
                 <button type="submit">Se connecter</button>
             </form>

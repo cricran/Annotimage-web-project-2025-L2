@@ -3,7 +3,7 @@
 <?php ob_start() ?>
     <div id="content">
         <section id="presentation">
-        <img src="../static/images/favicon.png" alt="logo" height="50px">
+        <img src="../static/images/favicon.png" alt="logo" height="50">
         <h2>Bienvenue sur Annotimage</h2>
             <ul>
                 <li>Téléversser vos images</li>

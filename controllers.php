@@ -258,4 +258,14 @@ function profile() {
     exit();
 }
 
+function upload() {
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        addNotification('error', 'Erreur', 'Vous devez être connecter pour accéder à cette page');
+        header('Location: /index.php');
+        return;
+    }
+    require 'templates/upload.php';
+}
+
 ?>
