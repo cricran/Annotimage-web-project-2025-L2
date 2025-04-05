@@ -10,7 +10,6 @@
     <title><?php $title ?></title>
 </head>
 <body>
-    <?php echo $_SESSION['user']; ?>
     <?= $content ?>
     <?php include "notification.php"?>
 </body>

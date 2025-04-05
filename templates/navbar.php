@@ -4,8 +4,15 @@
             <input type="search" placeholder="Images, #tags, @utilisateurs">
         </form>
 
-        <div class="buttons">
-            <a id="signup" href="index.php/signup?callback=<?php echo $callback ?>">S'inscrire</a>
-            <a id="signin" href="index.php/signin?callback=<?php echo $callback ?>"></a>
-        </div>
+        <?php if (!isset($_SESSION['user'])): ?>
+            <div class="buttons">
+                <a id="signup" href="index.php/signup?callback=<?php echo $callback ?>">S'inscrire</a>
+                <a id="signin" href="index.php/signin?callback=<?php echo $callback ?>"></a>
+            </div>
+        <?php else: ?>
+            <div class="buttons">
+                <a id="profile" href="index.php/profile?name=<?php echo $_SESSION['username'] ?>">Mon profil</a>
+                <a id="settings" href="index.php/setting"><img src="../static/images/settings.svg" alt="settings"></a>
+            </div>
+        <?php endif; ?>    
 </header>

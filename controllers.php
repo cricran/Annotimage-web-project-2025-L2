@@ -98,7 +98,7 @@ function signin() {
 
     if(isset($_POST['email_pseudo'])) {
         session_regenerate_id(); 
-        
+
         $email_pseudo = htmlspecialchars($_POST['email_pseudo'], ENT_QUOTES, 'UTF-8');
         $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
 
@@ -123,6 +123,7 @@ function signin() {
         }
 
         $_SESSION['user'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
 
         disconnect_db($bd);
         addNotification('info', 'Information', 'Connexion réussie');

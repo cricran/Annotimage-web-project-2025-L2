@@ -59,25 +59,29 @@ header .buttons a {
 
 
 
-#signup {
+#signup,
+#profile {
     background-color: #a8c7fa;
     color: black;
 }
+
 
 #signin::before {
     content: "Se connecter";
 }
 
-
-
 #signup:hover,
-#signup:focus {
+#signup:focus,
+#profile:hover,
+#profile:focus {
     background-color: #99b7e7;
     cursor: pointer;
 }
 
 #signin:hover,
-#signin:focus {
+#signin:focus,
+#settings:hover,
+#settings:focus {
     background-color: #393a3d;
     cursor: pointer;
 }
@@ -86,6 +90,10 @@ header .buttons a {
     content: url(../images/logo.png) / "logo";
     height: 35px;
 
+}
+
+#settings {
+    width: 40px;
 }
 
 #searchBarTop input {
@@ -132,6 +140,10 @@ header .buttons a {
         background-image: url(../images/login.svg);
         background-repeat: no-repeat;
         background-position: center;
+    }
+
+    #settings {
+        width: 40px;
     }
 
     #signin::before {
