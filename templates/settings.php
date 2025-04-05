@@ -18,7 +18,7 @@
             <h2>Supprimer mon compte</h2>
             <p>Si vous souhaitez supprimer votre compte, vous pouvez le faire ici. Cela supprimera toutes vos images et annotations.</p>
             <form action="/index.php/settings?callback=<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>" method="POST">
-                <button type="submit" class="sup">Supprimer mon compte</button>
+                <button type="submit" class="sup" name="delete">Supprimer mon compte</button>
             </form>
         </section>
         <section id="logout">
