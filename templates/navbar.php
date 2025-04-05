@@ -12,7 +12,7 @@
         <?php else: ?>
             <div class="buttons">
                 <a id="profile" href="index.php/profile?name=<?php echo $_SESSION['username'] ?>">Mon profil</a>
-                <a id="settings" href="index.php/setting"><img src="../static/images/settings.svg" alt="settings"></a>
+                <a id="settings" href="index.php/settings?callback=<?php echo $callback ?>"><img src="../static/images/settings.svg" alt="settings"></a>
             </div>
         <?php endif; ?>    
 </header>

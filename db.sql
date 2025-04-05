@@ -12,14 +12,14 @@ create table annotimage.image (
     public boolean default false,
     date datetime not null,
     userId int not null,
-    foreign key (userId) references user(id)
+    foreign key (userId) references user(id) ON DELETE CASCADE
 )engine InnoDB;
 
 create table annotimage.annotation (
 	id int auto_increment primary key,
     imageId int not null,
     description varchar(1024) not null,
-    foreign key (imageId) references image(id)
+    foreign key (imageId) references image(id) ON DELETE CASCADE
 )engine InnoDB;
 
 create table annotimage.tag (
@@ -30,8 +30,8 @@ create table annotimage.tag (
 create table annotimage.taged (
 	imageId int,
     tagId int,
-    foreign key (imageId) references image(id),
-    foreign key (tagId) references tag(id)
+    foreign key (imageId) references image(id) ON DELETE CASCADE,
+    foreign key (tagId) references tag(id) ON DELETE CASCADE
 )engine InnoDB;
     
 
