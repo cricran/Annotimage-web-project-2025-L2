@@ -266,9 +266,21 @@ function upload() {
         return;
     }
     if (isset($_POST['envoyer'])) {
-        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
+        if(!isset($_POST['description']) || !isset($_POST['date']) || !isset($_POST['public'])) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+            require 'templates/upload.php';
+            return;
+        }
+
         $issue = false;
 
+        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
+        $date = htmlspecialchars($_POST['date'], ENT_QUOTES, 'UTF-8');
+        
+        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $date) || !strtotime($date)) {
+            addNotification('error', 'Erreur', 'Format de date invalide (YYYY-MM-DD HH:MM:SS)');
+            $issue = true;
+        }
         if (strlen($description) > 1024) {
             addNotification('error', 'Erreur', 'La description doit faire au plus 1024 caractères');
             $issue = true;
@@ -304,8 +316,8 @@ function upload() {
         $r->execute([
             ':path' => 'None',
             ':description' => $description,
-            ':public' => 1,
-            ':date' => '2025-12-20',
+            ':public' => $_POST['public'] === null ? 0 : 1,
+            ':date' => $date,
             ':userid' => $_SESSION['user']
         ]);
         if (!$r) {

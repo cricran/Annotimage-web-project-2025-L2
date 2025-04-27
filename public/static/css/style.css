@@ -518,8 +518,17 @@ select {
     color: black;
 }
 
+#upload input[type="checkbox"] {
+    height: auto;
+    min-width: 0px;
+    width: auto;
+    margin-left: 30px;
+    height: 15px;
+    padding-top: 20px;
+}
+
 #upload input[type=file]::file-selector-button {
-    width: 50%;
+    width: 30%;
     background-color: transparent;
     color: white;
     border: none;

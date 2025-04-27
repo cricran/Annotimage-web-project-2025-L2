@@ -15,37 +15,16 @@
                     <br>
                     <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" id="fileInput" name="fileInput">
                 </div>
-
                 <div>
                     <input type="text" placeholder="Description" name="description" required>
-                    
                     <div id="tags">
                         <input type="text" placeholder="Ajouter des tags" id="name_add_tag">
                         <input type="button" value="+" id="add_tag">
                     </div>
-                    
                     <div id="selected_tag">
-                        <!-- <div>
-                            <span>#cinema</span>
-                            <button><img src="../static/images/close.svg" alt="suprimer"></button>
-                        </div>
-                        <div>
-                            <span>#cinema</span>
-                            <button><img src="../static/images/close.svg" alt="suprimer"></button>
-                        </div> -->
-
                     </div>
-                    <!-- <select name="" id="">
-                        <option value="">Ajouter dans une collection</option>
-                        <option value="dog">Dog</option>
-                        <option value="cat">Cat</option>
-                        <option value="hamster">Hamster</option>
-                        <option value="parrot">Parrot</option>
-                        <option value="spider">Spider</option>
-                        <option value="goldfish">Goldfish</option>
-                    </select> -->
+                    <p>Rendre votre image public : <input type="checkbox" name="public" id="public"></p>
                     
-
                     <input type="submit" name="envoyer" value="envoyer">
                 </div>
 
