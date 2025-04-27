@@ -110,7 +110,7 @@ function signin() {
             require 'templates/signin.php';
             return;
         }
-        if ($r_user->rowCount() == 0) {
+        if ($r_user->rowCount() != 1) {
             addNotification('error', 'Erreur', 'Email ou pseudo incorrect');
             require 'templates/signin.php';
             return;
@@ -261,11 +261,127 @@ function profile() {
 function upload() {
     session_start();
     if (!isset($_SESSION['user'])) {
-        addNotification('error', 'Erreur', 'Vous devez être connecter pour accéder à cette page');
+        addNotification('error', 'Erreur', 'Vous devez être connecter pour ajouter une image');
         header('Location: /index.php');
         return;
     }
+    if (isset($_POST['envoyer'])) {
+        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
+        $issue = false;
+
+        if (strlen($description) > 1024) {
+            addNotification('error', 'Erreur', 'La description doit faire au plus 1024 caractères');
+            $issue = true;
+        }
+        if (strlen($description) < 5) {
+            addNotification('error', 'Erreur', 'La description doit faire au moins 5 caractères');
+            $issue = true;
+        }
+        if (!isset($_FILES['fileInput'])) {
+            addNotification('error', 'Erreur', 'Vous devez fournir une image valide');
+            $issue = true;
+        } else {
+            if ($_FILES['fileInput']['error'] !== UPLOAD_ERR_OK) {
+                addNotification('error', 'Erreur', 'L\'image n\'as pas put être ajouté');
+                $issue = true;
+            }
+            if (preg_match('#^[a-z]+/([a-z0-9\-\.\+]+)$#i', $_FILES['fileInput']['type'], $f_type)) {
+                $f_type =  $f_type[1];
+            }
+            if ($f_type !== 'png' && $f_type !== 'jpeg' && $f_type !== 'jpg' && $f_type !== 'webp') {
+                addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpeg (jpeg) ou webp. Vous aves donné : ' . $f_type);
+                $issue = true;
+            }
+        }
+        if ($issue) {
+            require 'templates/upload.php';
+            return;
+        }
+
+        $bd = connect_db();
+        #Ajout de l'image à la bd
+        $r = $bd->prepare("INSERT INTO image (path, description, public, date, userid) VALUES (:path, :description, :public, :date, :userid)");
+        $r->execute([
+            ':path' => 'None',
+            ':description' => $description,
+            ':public' => 1,
+            ':date' => '2025-12-20',
+            ':userid' => $_SESSION['user']
+        ]);
+        if (!$r) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+            require 'templates/upload.php';
+            return;
+        }
+        $id = $bd->lastInsertId();
+        $path = '../images/';
+        $path .= $id;
+        $path .= '.'.$f_type;
+        $r = $bd->prepare("UPDATE image SET path = :path WHERE id = :id");
+        $r->execute([
+            ':path' => $path,
+            ':id' => $id
+        ]);
+        if (!$r) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout du chemin de l\'image');
+            require 'templates/upload.php';
+            return;
+        }
+        #deplacement de l'image
+        if (!is_dir('../images')) {
+            mkdir('images', 0755, true);
+        }
+        
+        if (!move_uploaded_file($_FILES['fileInput']['tmp_name'], $path)) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+            require 'templates/upload.php';
+            return;
+        }
+        #liaison de l'image à ces tags &
+        #Ajout de tout les tags à la bd
+        foreach ($_POST['tags'] as $tag) {
+            // Check if tag already exists
+            $r = $bd->prepare("SELECT id FROM tag WHERE name = :name");
+            $r->execute([':name' => $tag]);
+            if (!$r) {
+                addNotification('error', 'Erreur', 'Erreur lors de la vérification des tags');
+                require 'templates/upload.php';
+                return;
+            }
+            
+            if ($r->rowCount() > 0) {
+                // Tag exists, get its ID
+                $tag_id = $r->fetch()['id'];
+            } else {
+                // Tag doesn't exist, create it
+                $r = $bd->prepare("INSERT INTO tag (name) VALUES (:name)");
+                $r->execute([':name' => $tag]);
+                if (!$r) {
+                    addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
+                    require 'templates/upload.php';
+                    return;
+                }
+                $tag_id = $bd->lastInsertId();
+            }
+            $r = $bd->prepare("INSERT INTO taged (imageId, tagId) VALUES (:imageId, :tagId)");
+            $r->execute([
+                ':imageId' => $id,
+                ':tagId' => $tag_id
+            ]);
+            if (!$r) {
+                addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
+                require 'templates/upload.php';
+                return;
+            }
+        }
+        addNotification('success', 'Succès', 'L\'image à été ajouté');
+        if (isset($_POST['callback'])) {
+            header('Location: /' . $_POST['callback']);
+        } else {
+            header('Location: index.php');
+        }
+        exit();
+    }
     require 'templates/upload.php';
 }
-
 ?>

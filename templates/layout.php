@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="../static/images/favicon.png">
     <script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../static/js/code.js" ></script>
-    <?php if (isset($style)): ?>
+    <?php if (isset($script)): ?>
         <script src="<?= $script ?>"></script>
     <?php endif; ?>
     <title><?= $title ?></title>

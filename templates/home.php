@@ -13,7 +13,7 @@
             <input type="search" placeholder="Images, #tags, @utilisateurs">
         </form>
 
-        <a onclick="window.location.href='upload.html'">
+        <a href="index.php/upload?callback=index.php">
             Nouveau post
             <img src="../static/images/upload.svg" alt="upload">
         </a>

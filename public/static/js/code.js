@@ -4,9 +4,6 @@ $(document).ready(function () {
     showNotifications();
 });
 
-
-
-
 // Notification
 function showNotifications() {
     var notif = $("#notification div");
@@ -27,7 +24,6 @@ function hideNotifications(notif) {
 }
 
 // Confirmation dialog
-
 function confirmDialog(title, message, callback) {
     var contenue = `
     <dialog id="confirmDialog" class="dialog">
@@ -46,7 +42,6 @@ function confirmDialog(title, message, callback) {
     dialog.showModal();
 
     $('#confirm').on('click', function () {
-        console.log("Confirmed");
         dialog.close();
         $('#confirmDialog').remove();
         if (callback) {
@@ -55,7 +50,6 @@ function confirmDialog(title, message, callback) {
         return false;
     });
     $('#cancel').on('click', function () {
-        console.log("Canceled");
         dialog.close();
         $('#confirmDialog').remove();
         if (callback) {
@@ -74,3 +68,18 @@ function handleFormSubmit(event, dialogTitle, dialogMessage) {
     });
 }
 
+
+function addTagList(name, place) {
+    var content = `
+    <div>
+        <span>${name}</span>
+        <button><img src="../static/images/close.svg" alt="suprimer"></button>
+        <input type="hidden" name="tags[]" id="tags" value="${name}">
+    </div>
+    `;
+    $(place).prepend(content);
+    var addedButton = $(place + " div:first-of-type button");
+    addedButton.on('click', function (event) {
+        $(this).closest("div").remove();
+    })
+}

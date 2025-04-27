@@ -1,32 +1,38 @@
 <?php $title = "Annotimage - Acceuille"?>
 <?php $callback = 'index.php' ?>
+<?php $script = '../static/js/upload.js' ?>
 
 <?php ob_start() ?>
 
     <div id="center">
         <div id="upload">
-            <a href="/html/"><img src="../static/images/close.svg" alt="close"></a>
+            <a href="/<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
             <h2>Ajouter une image</h2>
-            <form action="" id="form">
+            <form action="/index.php/upload" id="form" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
                 <div>
-                    <input type="file" accept="image/*" onchange="previewImage()">
+                    <img id="imagePreview" src="../static/images/no_image.svg" alt="Image Preview"/>
                     <br>
-                    <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 100%;" />
+                    <input type="file" accept="image/png, image/jpeg, image/jpg, image/webp" id="fileInput" name="fileInput">
                 </div>
 
                 <div>
-                    <input type="text" placeholder="Description">
-
-                    <input type="text" placeholder="Ajouter des tags">
-                    <div id="selected_tag" style="display: block;">
-                        <div>
+                    <input type="text" placeholder="Description" name="description" required>
+                    
+                    <div id="tags">
+                        <input type="text" placeholder="Ajouter des tags" id="name_add_tag">
+                        <input type="button" value="+" id="add_tag">
+                    </div>
+                    
+                    <div id="selected_tag">
+                        <!-- <div>
                             <span>#cinema</span>
                             <button><img src="../static/images/close.svg" alt="suprimer"></button>
                         </div>
                         <div>
                             <span>#cinema</span>
                             <button><img src="../static/images/close.svg" alt="suprimer"></button>
-                        </div>
+                        </div> -->
 
                     </div>
                     <!-- <select name="" id="">
@@ -38,7 +44,9 @@
                         <option value="spider">Spider</option>
                         <option value="goldfish">Goldfish</option>
                     </select> -->
-                    <input type="submit" value="envoyer">
+                    
+
+                    <input type="submit" name="envoyer" value="envoyer">
                 </div>
 
             </form>

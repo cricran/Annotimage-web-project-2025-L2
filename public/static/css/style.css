@@ -243,6 +243,7 @@ button {
     width: 100px;
     color: white;
     cursor: pointer;
+    text-decoration: none;
 }
 
 #main a:focus,
@@ -493,9 +494,9 @@ button {
 }
 
 #upload input,
-select,
-span {
+select {
     width: 100%;
+    min-width: 32vw;
     height: 40px;
     margin: 5px 0;
     background-color: #2f3033;
@@ -548,18 +549,22 @@ span {
 #selected_tag {
     margin: 0;
     margin-bottom: 15px;
+    max-height: 50vw;
+    min-width: 0px;
+    overflow: auto;
 }
 
 #selected_tag div {
-    width: 70%;
     margin: 0;
     margin: auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin-bottom: 5px;
+    min-width: 0;
 }
 
 #selected_tag div button {
+    min-width: none;
     width: 40px;
     background-color: #ea4335;
     color: black;
@@ -567,14 +572,14 @@ span {
 
 #selected_tag div button img {
     width: 17px;
-    margin: 0;
+    margin: 0px;
 }
 
 #selected_tag div span {
-    vertical-align: middle;
+    width: 30vw;
+    overflow: hidden;
+    padding-right: 10px;
     margin: 0;
-    display: inline-block;
-    width: calc(100% - 50px);
     line-height: 40px
 }
 
@@ -590,6 +595,24 @@ span {
     position: relative;
     float: right;
 }
+
+#upload #add_tag {
+    min-width: 0px !important;
+    width: 42px;
+    margin: 5px;
+}
+
+#upload #tags {
+    display: flex;
+}
+
+#upload #imagePreview {
+    max-width: 100%;
+    display: block;
+    border-radius: 10px;
+    margin: auto;
+}
+
 
 /* User, tag page */
 
