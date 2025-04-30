@@ -266,8 +266,9 @@ function upload() {
         return;
     }
     if (isset($_POST['envoyer'])) {
-        if(!isset($_POST['description']) || !isset($_POST['date']) || !isset($_POST['public'])) {
-            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+
+        if(!isset($_POST['description']) || !isset($_POST['date'])) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image 0');
             require 'templates/upload.php';
             return;
         }
@@ -296,13 +297,16 @@ function upload() {
             if ($_FILES['fileInput']['error'] !== UPLOAD_ERR_OK) {
                 addNotification('error', 'Erreur', 'L\'image n\'as pas put être ajouté');
                 $issue = true;
-            }
-            if (preg_match('#^[a-z]+/([a-z0-9\-\.\+]+)$#i', $_FILES['fileInput']['type'], $f_type)) {
-                $f_type =  $f_type[1];
-            }
-            if ($f_type !== 'png' && $f_type !== 'jpeg' && $f_type !== 'jpg' && $f_type !== 'webp') {
-                addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpeg (jpeg) ou webp. Vous aves donné : ' . $f_type);
-                $issue = true;
+            } else {
+                if (preg_match('#^[a-z]+/([a-z0-9\-\.\+]+)$#i', $_FILES['fileInput']['type'], $f_type)) {
+                    var_dump($f_type);
+                    $f_type =  $f_type[1];
+                }
+                
+                if ($f_type !== 'png' && $f_type !== 'jpeg' && $f_type !== 'jpg' && $f_type !== 'webp') {
+                    addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpeg (jpeg) ou webp. Vous aves donné : ' . $f_type);
+                    $issue = true;
+                }
             }
         }
         if ($issue) {
@@ -321,7 +325,7 @@ function upload() {
             ':userid' => $_SESSION['user']
         ]);
         if (!$r) {
-            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image 1');
             require 'templates/upload.php';
             return;
         }
@@ -335,7 +339,7 @@ function upload() {
             ':id' => $id
         ]);
         if (!$r) {
-            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout du chemin de l\'image');
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout du chemin de l\'image 0.5');
             require 'templates/upload.php';
             return;
         }
@@ -345,7 +349,7 @@ function upload() {
         }
         
         if (!move_uploaded_file($_FILES['fileInput']['tmp_name'], $path)) {
-            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image');
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image 2');
             require 'templates/upload.php';
             return;
         }
@@ -362,10 +366,9 @@ function upload() {
             }
             
             if ($r->rowCount() > 0) {
-                // Tag exists, get its ID
                 $tag_id = $r->fetch()['id'];
             } else {
-                // Tag doesn't exist, create it
+                // Tag dont exist
                 $r = $bd->prepare("INSERT INTO tag (name) VALUES (:name)");
                 $r->execute([':name' => $tag]);
                 if (!$r) {

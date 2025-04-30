@@ -494,7 +494,8 @@ button {
 }
 
 #upload input,
-select {
+select,
+textarea {
     width: 100%;
     min-width: 32vw;
     height: 40px;
@@ -506,6 +507,11 @@ select {
     color: white;
     border-radius: 8px;
     font-size: 15px;
+}
+
+#upload textarea {
+    padding: 12px;
+    height: 80px;
 }
 
 #upload input[type="file"] {
@@ -537,7 +543,7 @@ select {
 
 #upload img {
     max-height: 300px;
-    max-width: 100%;
+    max-width: 500px;
     margin: auto;
     margin-top: 15px;
     margin-bottom: 15px;
