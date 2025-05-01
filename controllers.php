@@ -2,6 +2,20 @@
 
 function home() {
     session_start();
+    $bd = connect_db();
+    $r = $bd->prepare("
+    SELECT path, description, username as name, GROUP_CONCAT(name) as tags
+    FROM image
+    JOIN user ON user.id = image.userId
+    JOIN taged ON taged.imageId = image.id 
+    JOIN tag ON tag.id = taged.tagId
+    GROUP BY image.id, path, description, username
+    ORDER BY date desc
+    LIMIT 40
+    ");
+    $r->execute();
+    $infos = $r->fetchAll();
+    
     require 'templates/home.php';
 }
 
@@ -333,9 +347,10 @@ function upload() {
         $path = '../images/';
         $path .= $id;
         $path .= '.'.$f_type;
+        $name = $id . '.'.$f_type;
         $r = $bd->prepare("UPDATE image SET path = :path WHERE id = :id");
         $r->execute([
-            ':path' => $path,
+            ':path' => $name,
             ':id' => $id
         ]);
         if (!$r) {

@@ -39,5 +39,36 @@ function clearNotifications() {
     $_SESSION['notifications'] = [];
 }
 
-?>
+// Images
+
+function createImage($info) {?>
+    <article>
+        <div>
+            <img src="image.php?image=<?= $info['path']?>" alt="image">
+        </div>
+        <h2><?= $info['description']?></h2>
+        <p><a href="user.html?name=<?= $info['name']?>">@<?= $info['name']?></a></p>
+        <p>
+        <?php $tags = explode(',', $info['tags']); ?>
+        <?php foreach($tags as $tag) : ?>
+            <a href="tag.html?tag=<?=$tag?>">#<?=$tag?></a>
+        <?php endforeach; ?>
+        </p>
+    </article>
+<?php
+}
+
+function displayImages($infos) {
+    if ($infos === []) {
+        echo '<p>Aucune images à afficher</p>';
+    }
+    echo '<div class="grid">';
+    foreach ($infos as $info) {
+        createImage($info);
+    }
+    echo '</div>';
+}
+
+
+
 
