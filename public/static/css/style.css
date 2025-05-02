@@ -17,6 +17,13 @@ html {
     font-family: moto, monospace;
 }
 
+.seeMore {
+    display: block;
+    text-align: center;
+    margin: 35px 5px 35px 5px;
+    color: white;
+}
+
 /* Header */
 
 header {
@@ -288,7 +295,7 @@ button {
     margin: 0 15px 0px 15px;
     opacity: 50%;
     text-align: center;
-    width: 90%;
+    /* width: 90%; */
     overflow: auto;
     text-wrap: nowrap;
 }
@@ -325,8 +332,6 @@ button {
     text-align: center;
 }
 
-
-
 #showImg1 {
     width: 80%;
     height: fit-content;
@@ -345,12 +350,6 @@ button {
     width: min(100%, 500px);
     border-radius: 10px;
 }
-
-
-
-
-
-
 
 /*login presentation */
 
@@ -618,6 +617,7 @@ h2 {
     width: 100%;
     display: flex;
     justify-content: space-around;
+    margin-bottom: 90px;
 }
 
 #search input[type="search"] {
@@ -630,7 +630,7 @@ h2 {
     background-color: #2f3033;
     color: white;
     padding-left: min(10%, 25px);
-    padding-right: 10%;
+    padding-right: 15px;
     font-size: 16px;
 }
 
@@ -907,4 +907,29 @@ span {
 
 #confirm:hover {
     background-color: #99b7e7;
+}
+
+/* Page Index */
+
+#page_index p {
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+#page_index a {
+    margin: 5px;
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: #2f3033;
+}
+
+#page_index a.page_select {
+    color: gray;
+}
+
+#page_index a:not(.page_select):hover {
+    background-color: #383a3d;
 }

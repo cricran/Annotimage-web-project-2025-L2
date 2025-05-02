@@ -7,13 +7,16 @@ function home() {
     SELECT path, description, username as name, GROUP_CONCAT(name) as tags
     FROM image
     JOIN user ON user.id = image.userId
-    JOIN taged ON taged.imageId = image.id 
-    JOIN tag ON tag.id = taged.tagId
+    LEFT JOIN taged ON taged.imageId = image.id 
+    LEFT JOIN tag ON tag.id = taged.tagId
+    WHERE public = 1 or image.id = :id
     GROUP BY image.id, path, description, username
     ORDER BY date desc
     LIMIT 40
     ");
-    $r->execute();
+    $r->execute([
+        'id' => $_SESSION['user'] ?? ''
+    ]);
     $infos = $r->fetchAll();
     
     require 'templates/home.php';
@@ -96,9 +99,9 @@ function signup() {
         addNotification('success', 'Succès', 'Inscription réussie ! Vous <a href="/index.php/signin?callback=' . $callback . '">pouvez vous connecter</a> maintenant');
 
         if (isset($_POST['callback'])) {
-            header('Location: /' . $_POST['callback']);
+            header('Location: ' . $_POST['callback']);
         } else {
-            header('Location: index.php');
+            header('Location: /index.php');
         }
         exit();
     }
@@ -108,7 +111,6 @@ function signup() {
 
 function signin() {
     session_start();
-
 
     if(isset($_POST['email_pseudo'])) {
         session_regenerate_id(); 
@@ -144,7 +146,7 @@ function signin() {
         addNotification('info', 'Information', 'Connexion réussie');
         
         if (isset($_POST['callback'])) {
-            header('Location: /' . $_POST['callback']);
+            header('Location: ' . $_POST['callback']);
         } else {
             header('Location: index.php');
         }
@@ -263,13 +265,6 @@ function settings() {
     }
 
     require 'templates/settings.php';
-}
-
-function profile() {
-    session_start();
-    addNotification('error', 'Erreur', 'Cette page est encore en construction');
-    header('Location: /index.php');
-    exit();
 }
 
 function upload() {
@@ -414,4 +409,260 @@ function upload() {
     }
     require 'templates/upload.php';
 }
-?>
+
+function tag() {
+    session_start();
+    $limit = 12;
+    $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+    $offset = ($page - 1) * $limit;
+    $tag = isset($_GET['tag']) ? $_GET['tag'] : "";
+
+    $attribut = "tag";
+
+    $bd = connect_db();
+
+    $getId = $bd->prepare("
+    SELECT id 
+    FROM tag 
+    WHERE name = :tag
+    ");
+    $getId->execute(['tag' => $tag]);
+    $tagId = $getId->fetch();
+    if (!$tagId) {
+        http_response_code(404);
+        echo "Tag introuvable";
+        exit;
+    }
+    $tagId = $tagId['id'];
+
+    $sessionId = $_SESSION['user'] ?? null;
+
+    $count = $bd->prepare("
+    SELECT COUNT(DISTINCT image.id) as total
+    FROM image
+    JOIN taged ON taged.imageId = image.id
+    WHERE taged.tagId = :tagId AND (public = 1 OR :sessionId = image.userId)
+    ");
+    $count->execute([
+        'tagId' => $tagId,
+        'sessionId' => $sessionId
+    ]);
+    $totalImages = $count->fetchAll()[0]['total'];
+    $totalPages = max(1, ceil($totalImages / $limit));
+
+    $r = $bd->prepare("
+    SELECT image.id, path, description, username as name, GROUP_CONCAT(tag.name) as tags
+    FROM image
+    JOIN user ON user.id = image.userId
+    LEFT JOIN taged ON taged.imageId = image.id 
+    LEFT JOIN tag ON tag.id = taged.tagId
+    WHERE taged.tagId = :tagId AND (public = 1 OR :sessionId = image.userId)
+    GROUP BY image.id, path, description, username
+    ORDER BY MAX(date) DESC
+    LIMIT $limit OFFSET $offset
+    ");
+
+    $r->execute([
+        'tagId' => $tagId,
+        'sessionId' => $sessionId
+    ]);
+    $infos = $r->fetchAll();
+
+    $callback = '/index.php/tag?tag=' . urlencode($tag);
+    
+    require 'templates/tag.php';
+}
+
+function user() {
+    session_start();
+    $limit = 12;
+    $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+    $offset = ($page - 1) * $limit;
+    $user = isset($_GET['user']) ? $_GET['user'] : "";
+
+    $attribut = "user";
+
+    $bd = connect_db();
+
+    $getId = $bd->prepare("
+    SELECT id 
+    FROM user 
+    WHERE username = :username
+    ");
+    $getId->execute(['username' => $user]);
+    $userId = $getId->fetch();
+    if (!$userId) {
+        http_response_code(404);
+        echo "Utilisateur introuvable";
+        exit;
+    }
+    $userId = $userId['id'];
+
+    $count = $bd->prepare("
+    SELECT COUNT(DISTINCT image.id) as total
+    FROM image
+    WHERE image.userId = :userId AND (public = 1 OR :sessionId = :userId)
+    ");
+    $sessionId = $_SESSION['user'] ?? null;
+    $count->execute([
+        'userId' => $userId,
+        'sessionId' => $sessionId
+    ]);
+    $totalImages = $count->fetchAll()[0]['total'];
+    $totalPages = max(1, ceil($totalImages / $limit));
+
+    $r = $bd->prepare("
+    SELECT image.id, path, description, username as name, GROUP_CONCAT(tag.name) as tags
+    FROM image
+    JOIN user ON user.id = image.userId
+    LEFT JOIN taged ON taged.imageId = image.id 
+    LEFT JOIN tag ON tag.id = taged.tagId
+    WHERE image.userId = :userId AND (public = 1 OR :sessionId = :userId)
+    GROUP BY image.id, path, description, username
+    ORDER BY MAX(date) DESC
+    LIMIT $limit OFFSET $offset
+    ");
+
+    $r->execute([
+        'userId' => $userId,
+        'sessionId' => $_SESSION['user'] ?? '',
+    ]);
+    $infos = $r->fetchAll();
+
+    $callback = '/index.php/user?user=' . $user;
+    
+    require 'templates/user.php';
+}
+
+function search() {
+    session_start();
+    $limit = 12;
+    $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+    $offset = ($page - 1) * $limit;
+    $query = isset($_GET['q']) ? trim($_GET['q']) : "";
+
+    $attribut = "q";
+    $bd = connect_db();
+    $sessionId = $_SESSION['user'] ?? null;
+
+    // Si aucun terme de recherche → comportement home
+    if ($query === "") {
+        $count = $bd->prepare("
+        SELECT COUNT(*) as total
+        FROM image
+        WHERE public = 1 OR :sessionId = image.userId
+        ");
+        $count->execute(['sessionId' => $sessionId]);
+        $totalImages = $count->fetch()['total'];
+        $totalPages = max(1, ceil($totalImages / $limit));
+
+        $r = $bd->prepare("
+        SELECT image.id, path, description, username as name, GROUP_CONCAT(DISTINCT tag.name) as tags
+        FROM image
+        LEFT JOIN taged ON taged.imageId = image.id
+        LEFT JOIN tag ON tag.id = taged.tagId
+        LEFT JOIN user ON user.id = image.userId
+        WHERE public = 1 OR image.userId = :sessionId
+        GROUP BY image.id, path, description, username
+        ORDER BY MAX(date) DESC
+        LIMIT $limit OFFSET $offset
+        ");
+        $r->execute([
+            'sessionId' => $sessionId]
+        );
+    } else {
+        // Analyse de la recherche
+        $terms = preg_split('/\s+/', $query);
+        $users = [];
+        $tags = [];
+        $descs = [];
+
+        foreach ($terms as $term) {
+            if (str_starts_with($term, '@')) {
+                $users[] = substr($term, 1);
+            } elseif (str_starts_with($term, '#')) {
+                $tags[] = substr($term, 1);
+            } else {
+                $descs[] = $term;
+            }
+        }
+
+        $params = ['sessionId' => $sessionId];
+        $conditions = [];
+
+        // utilisateur -> au moins un doit matcher
+        if (!empty($users)) {
+            $userConds = [];
+            foreach ($users as $index => $user) {
+                $param = "user$index";
+                $userConds[] = "username = :$param";
+                $params[$param] = $user;
+            }
+            $conditions[] = '(' . implode(' OR ', $userConds) . ')';
+        }
+
+        // tags -> au moins un doit matcher
+        if (!empty($tags)) {
+            $tagConds = [];
+            foreach ($tags as $index => $tag) {
+                $param = "tag$index";
+                $tagConds[] = "tag.name = :$param";
+                $params[$param] = $tag;
+            }
+            // For tags, we need to match at least one tag per image, so we use EXISTS
+            $conditions[] = "(EXISTS (
+                SELECT 1 FROM taged tg
+                JOIN tag t ON t.id = tg.tagId
+                WHERE tg.imageId = image.id AND (" . implode(" OR ", $tagConds) . ")
+            ))";
+        }
+
+        // description -> au moins un doit matcher
+        if (!empty($descs)) {
+            $descConds = [];
+            foreach ($descs as $index => $desc) {
+                $param = "desc$index";
+                $descConds[] = "description LIKE :$param";
+                $params[$param] = "%$desc%";
+            }
+            $conditions[] = "(" . implode(" OR ", $descConds) . ")";
+        }
+
+        $whereClause = empty($conditions) ? "1" : implode(" AND ", $conditions);
+
+        // Total
+        $count = $bd->prepare("
+        SELECT COUNT(DISTINCT image.id) as total
+        FROM image
+        LEFT JOIN taged ON taged.imageId = image.id
+        LEFT JOIN tag ON tag.id = taged.tagId
+        JOIN user ON user.id = image.userId
+        WHERE ($whereClause)
+          AND (public = 1 OR :sessionId = image.userId)
+        ");
+        $count->execute($params);
+        $totalImages = $count->fetch()['total'];
+        $totalPages = max(1, ceil($totalImages / $limit));
+
+        // Données
+        $r = $bd->prepare("
+        SELECT image.id, path, description, username as name, GROUP_CONCAT(DISTINCT tag.name) as tags
+        FROM image
+        LEFT JOIN taged ON taged.imageId = image.id
+        LEFT JOIN tag ON tag.id = taged.tagId
+        JOIN user ON user.id = image.userId
+        WHERE ($whereClause)
+          AND (public = 1 OR :sessionId = image.userId)
+        GROUP BY image.id
+        ORDER BY MAX(date) DESC
+        LIMIT $limit OFFSET $offset
+        ");
+        // $params['offset'] = $offset;
+        $r->execute($params);
+    }
+
+    $infos = $r->fetchAll();
+    $callback = '/index.php/search?q=' . urlencode($query);
+
+    require 'templates/search.php';
+}

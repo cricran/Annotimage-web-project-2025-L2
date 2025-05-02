@@ -44,14 +44,20 @@ function clearNotifications() {
 function createImage($info) {?>
     <article>
         <div>
-            <img src="image.php?image=<?= $info['path']?>" alt="image">
+            <img src="/image.php?image=<?= $info['path']?>" alt="image">
         </div>
         <h2><?= $info['description']?></h2>
-        <p><a href="user.html?name=<?= $info['name']?>">@<?= $info['name']?></a></p>
+        <p><a href="/index.php/user?user=<?= $info['name']?>">@<?= $info['name']?></a></p>
         <p>
-        <?php $tags = explode(',', $info['tags']); ?>
+        <?php
+        if (!empty($info['tags'])) {
+            $tags = explode(',', $info['tags']);
+        } else {
+            $tags = [];
+        }
+        ?>
         <?php foreach($tags as $tag) : ?>
-            <a href="tag.html?tag=<?=$tag?>">#<?=$tag?></a>
+            <a href="/index.php/tag?tag=<?=$tag?>">#<?=$tag?></a>
         <?php endforeach; ?>
         </p>
     </article>
@@ -69,6 +75,18 @@ function displayImages($infos) {
     echo '</div>';
 }
 
+// Pages
 
+function createPageIndex($page, $nbPage, $attribut, $query) {
+    echo "<p>";
+    for($i = 1; $i <= $nbPage; ++$i) {
+        if ($i === $page) {
+            echo "<a href='?$attribut=" . urlencode($query) . "&page=$i' class='page_select'>$i</a>";
+        } else {
+            echo "<a href='?$attribut=" . urlencode($query) . "&page=$i'>$i</a>";
+        }
+    }
+    echo "</p>";
+}
 
 
