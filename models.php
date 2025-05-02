@@ -78,6 +78,7 @@ function displayImages($infos) {
 // Pages
 
 function createPageIndex($page, $nbPage, $attribut, $query) {
+    if ($nbPage === 1) return;
     echo "<p>";
     for($i = 1; $i <= $nbPage; ++$i) {
         if ($i === $page) {

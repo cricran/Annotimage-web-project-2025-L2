@@ -9,7 +9,7 @@ function home() {
     JOIN user ON user.id = image.userId
     LEFT JOIN taged ON taged.imageId = image.id 
     LEFT JOIN tag ON tag.id = taged.tagId
-    WHERE public = 1 or image.id = :id
+    WHERE public = 1 or image.userId = :id
     GROUP BY image.id, path, description, username
     ORDER BY date desc
     LIMIT 40

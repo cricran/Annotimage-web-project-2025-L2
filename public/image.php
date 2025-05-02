@@ -1,4 +1,9 @@
 <?php
+session_start();
+include_once "../models.php";
+
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
 if (!isset($_GET['image'])) {
     http_response_code(400);
@@ -6,8 +11,31 @@ if (!isset($_GET['image'])) {
     exit;
 }
 
-$imagePath = __DIR__ . '/../images/' . $_GET['image'];
+$bd = connect_db();
 
+$r = $bd->prepare("
+    SELECT *
+    FROM image
+    WHERE
+        path = :path and
+        public = 1 or userId = :id
+");
+
+$r->execute([
+    'id' => $_SESSION['user'] ?? '',
+    'path' => $_GET['image']
+]);
+
+if ($r->rowCount() <= 0) {
+    http_response_code(403);
+    echo "Error: You do not have acces to this ressource";
+    exit;
+}
+
+disconnect_db($bd);
+
+
+$imagePath = __DIR__ . '/../images/' . $_GET['image'];
 
 if (!file_exists($imagePath)) {
     http_response_code(404);
