@@ -146,7 +146,7 @@ function signin() {
         addNotification('info', 'Information', 'Connexion réussie');
         
         if (isset($_POST['callback'])) {
-            header('Location: ' . $_POST['callback']);
+            header('Location: /' . $_POST['callback']);
         } else {
             header('Location: /index.php');
         }

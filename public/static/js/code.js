@@ -100,7 +100,6 @@ function confirmDialogText(title, message, callback) {
     });
 }
 
-
 function handleFormSubmit(event, dialogTitle, dialogMessage) {
     event.preventDefault();
     var form = $(event.target);
@@ -113,7 +112,6 @@ function handleFormSubmit(event, dialogTitle, dialogMessage) {
 }
 
 // Image show
-
 function showImage(id) {
     $.getJSON(`/imageInfo.php?id=${id}`, function (data) {
         // L'image
@@ -126,10 +124,10 @@ function showImage(id) {
 
         var contenue = `
         <dialog id="showImg">
-            <button id="cancel"><img src="../static/images/close.svg" alt=""></button>
+            <button id="cancel"><img src="../static/images/close.svg" alt="close"></button>
             <diV>
                 <div id="imgZonne">
-                    <img src="/image.php?image=${data['image']['path']}" alt="image" id="imgZonne_img">
+                    <img src="/image.php?image=${data['image']['path']}" alt="${data['image']['description']}" id="imgZonne_img">
                     <div class="tooltip" id="annotation-tooltip"></div>
                 </div>
                 <div>
@@ -225,7 +223,6 @@ function showImage(id) {
 }
 
 // List dynamique
-
 function addTagList(name, place) {
     var content = `
     <div>
@@ -257,7 +254,6 @@ function addAnnotList(name, place, value) {
 }
 
 // translate point
-
 function translatePoint(point, srcRect, destRect) {
     return {
         x: (point.x * (destRect.width / srcRect.width)),

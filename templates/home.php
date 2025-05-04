@@ -56,10 +56,6 @@
 
 </script>
 
-<script>
-    showImage(40);
-</script>
-
 <?php $content = ob_get_clean() ?>
 
 <?php include 'layout.php' ?>
