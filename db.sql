@@ -19,6 +19,10 @@ create table annotimage.annotation (
 	id int auto_increment primary key,
     imageId int not null,
     description varchar(1024) not null,
+    startX int not null,
+    startY int not null,
+    endX int not null,
+    endY int not null,
     foreign key (imageId) references image(id) ON DELETE CASCADE
 )engine InnoDB;
 

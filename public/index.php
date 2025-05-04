@@ -22,8 +22,10 @@ if ($request == '/index.php' || $request == '/') {
     upload();
 } elseif ($request == '/index.php/tag') {
     tag();
-} elseif ($request == '/index.php/user') {
-    user();
+} elseif ($request == '/index.php/tag') {
+    tag();
+} elseif ($request == '/index.php/annotation') {
+    annotation();
 } else {
     header('HTTP/1.1 404 Not Found');
     echo '<html><body><h1>Page introuvable</h1></body></html>';

@@ -1,5 +1,5 @@
-<?php $title = "Annotimage - Acceuille"?>
-<?php $callback = 'index.php' ?>
+<?php $title = "Annotimage - Téléversser"?>
+<?php $callback = '/index.php/upload' ?>
 <?php $script = '../static/js/upload.js' ?>
 
 <?php ob_start() ?>

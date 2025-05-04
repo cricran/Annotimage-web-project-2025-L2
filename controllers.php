@@ -148,7 +148,7 @@ function signin() {
         if (isset($_POST['callback'])) {
             header('Location: ' . $_POST['callback']);
         } else {
-            header('Location: index.php');
+            header('Location: /index.php');
         }
         exit();
     }
@@ -366,7 +366,7 @@ function upload() {
         #liaison de l'image à ces tags &
         #Ajout de tout les tags à la bd
         foreach ($_POST['tags'] as $tag) {
-            // Check if tag already exists
+            // tag exist ???
             $r = $bd->prepare("SELECT id FROM tag WHERE name = :name");
             $r->execute([':name' => $tag]);
             if (!$r) {
@@ -665,4 +665,78 @@ function search() {
     $callback = '/index.php/search?q=' . urlencode($query);
 
     require 'templates/search.php';
+}
+
+function annotation() {
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        addNotification('error', 'Erreur', 'Vous devez être connecter pour accéder à cette page');
+        header('Location: /index.php');
+        return;
+    } elseif (isset($_POST['annot'])) {
+        if(!isset($_POST['id'])) {
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des annotations');
+            header('Location: /index.php/annotation');
+            return;
+        }
+        $bd = connect_db();
+        foreach ($_POST['annot'] as $annot) {
+            $json = json_decode($annot, true);
+            $name = htmlspecialchars($json['name'], ENT_QUOTES, 'UTF-8');
+            if (strlen($name) > 1024) {
+                addNotification('error', 'Erreur', 'L\'annotation "'.$name.'" continet trop de carractères et n\'a pas put être ajouté. Cependant, toutes les annottations précédente à celle ci ont été ajouté.');
+                header('Location: /index.php/annotation');
+                return;
+            }
+
+            $r = $bd->prepare("
+            INSERT INTO annotation (imageId, description, startX, startY, endX, endY) 
+            VALUES (:imageId, :name, :sx, :sy, :ex, :ey)");
+            $r->execute([
+                ':imageId' => $_POST['id'],
+                ':name' => $name,
+                ':sx' => $json['start']['x'],
+                ':sy' => $json['start']['y'],
+                ':ex' => $json['end']['x'],
+                ':ey' => $json['end']['y'],
+            ]);
+            if (!$r) {
+                addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'annotations "'.$name.'". Cependant, toutes les annottations précédente à celle ci ont été ajouté.');
+                header('Location: /index.php/annotation');
+                return;
+            }
+        }
+        addNotification('success', 'Succès', 'Les annotation ont été ajouté');
+        if (isset($_POST['callback'])) {
+            header('Location: /' . $_POST['callback']);
+        } else {
+            header('Location: index.php');
+        }
+        exit();
+    } else {
+        $bd = connect_db();
+        $r = $bd->prepare("
+        SELECT *
+        FROM image
+        WHERE id = :id AND userId = :sessionId
+        ");
+        $r->execute([
+            ':id' => $_GET['id'] ?? null, 
+            ':sessionId' => $_SESSION['user']
+        ]);
+        if ($r->rowCount() != 1) {
+            addNotification('error', 'Erreur', 'L\'image n\'existe pas ou vous n\'avez pas les droits pour la modifier');
+            if (isset($_POST['callback'])) {
+                header('Location: ' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
+            exit();
+        }
+        $info = $r->fetch();
+        $path = $info['path'];
+        $id = $info['id'];
+    
+        require 'templates/annotation.php';
+    }
 }

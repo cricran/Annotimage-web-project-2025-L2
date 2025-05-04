@@ -57,6 +57,44 @@ function confirmDialog(title, message, callback) {
         }
     });
 }
+
+function confirmDialogText(title, message, callback) {
+    var contenue = `
+    <dialog id="confirmDialog" class="dialog">
+        <div class="dialog-content">
+            <h2>${title}</h2>
+            <p>${message}</p>
+            <input type="text" id="promptInput" style="width: 100%; margin-bottom: 1em;">
+            <div>
+                <button id="cancel">Annuler</button>
+                <button id="confirm">Valider</button>
+            </div>
+        </div>
+    </dialog>
+    `;
+    $('body').append(contenue);
+    var dialog = document.getElementById('confirmDialog');
+    dialog.showModal();
+
+    $('#confirm').on('click', function () {
+        var value = $('#promptInput').val();
+        dialog.close();
+        $('#confirmDialog').remove();
+        if (callback) {
+            callback(value);
+        }
+        return false;
+    });
+    $('#cancel').on('click', function () {
+        dialog.close();
+        $('#promptDialog').remove();
+        if (callback) {
+            callback(null);
+        }
+    });
+}
+
+
 function handleFormSubmit(event, dialogTitle, dialogMessage) {
     event.preventDefault();
     var form = $(event.target);
@@ -82,4 +120,28 @@ function addTagList(name, place) {
     addedButton.on('click', function (event) {
         $(this).closest("div").remove();
     })
+}
+
+function addAnnotList(name, place, value) {
+    var content = `
+    <div>
+        <span>${name}</span>
+        <button><img src="../static/images/close.svg" alt="suprimer"></button>
+        <input type="hidden" name="annot[]" value='${value.replace(/'/g, "&#39;")}'>
+    </div>
+    `;
+    $(place).prepend(content);
+    var addedButton = $(place + " div:first-of-type button");
+    addedButton.on('click', function (event) {
+        $(this).closest("div").remove();
+    })
+}
+
+// translate point
+
+function translatePoint(point, srcRect, destRect) {
+    return {
+        x: (point.x * (destRect.width / srcRect.width)),
+        y: (point.y * (destRect.height / srcRect.height))
+    };
 }

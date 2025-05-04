@@ -673,6 +673,16 @@ span {
     font-size: 15px;
 }
 
+#annote div span {
+    width: 40vw;
+    max-width: 30vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: 10px;
+    margin: 0;
+    line-height: 40px;
+}
+
 #annote input[type="submit"] {
     margin-top: 30px;
     background-color: #a8c7fa;
@@ -680,8 +690,8 @@ span {
 }
 
 #annote img {
-    max-height: 300px;
-    max-width: 100%;
+    /* max-height: 300px; */
+    max-width: max(30vw, 300px);
     margin: auto;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -713,7 +723,7 @@ span {
 }
 
 #annote_area div {
-    width: 70%;
+    width: 100%;
     margin: 0;
     margin: auto;
     display: flex;
@@ -722,7 +732,7 @@ span {
 }
 
 #annote_area div button {
-    width: 40px;
+    width: 55px;
     background-color: #ea4335;
     color: black;
 }
@@ -898,6 +908,19 @@ span {
 .dialog-content div {
     display: flex;
     justify-content: space-around;
+}
+
+.dialog-content input {
+    width: 100%;
+    height: 40px;
+    margin: 5px 0;
+    background-color: #2f3033;
+    border: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
 }
 
 #confirm {
