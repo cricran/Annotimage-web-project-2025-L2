@@ -451,14 +451,14 @@ function tag() {
     $totalPages = max(1, ceil($totalImages / $limit));
 
     $r = $bd->prepare("
-    SELECT image.id, path, description, username as name, GROUP_CONCAT(tag.name) as tags
+    SELECT image.id, path, description, username as name, GROUP_CONCAT(DISTINCT tag.name) as tags
     FROM image
     JOIN user ON user.id = image.userId
     LEFT JOIN taged ON taged.imageId = image.id 
     LEFT JOIN tag ON tag.id = taged.tagId
     WHERE taged.tagId = :tagId AND (public = 1 OR :sessionId = image.userId)
     GROUP BY image.id, path, description, username
-    ORDER BY MAX(date) DESC
+    ORDER BY image.date DESC
     LIMIT $limit OFFSET $offset
     ");
 
