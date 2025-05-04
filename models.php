@@ -42,7 +42,7 @@ function clearNotifications() {
 // Images
 
 function createImage($info) {?>
-    <article>
+    <article id="<?= $info['id']?>">
         <div>
             <img src="/image.php?image=<?= $info['path']?>" alt="image">
         </div>

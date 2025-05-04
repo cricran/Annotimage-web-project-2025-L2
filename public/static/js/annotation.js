@@ -76,6 +76,7 @@ $(document).ready(function () {
                     if (value) {
                         let pStart = translatePoint({ x: startX, y: startY }, imageDimensions, realImageDimensions);
                         let pEnd = translatePoint({ x: x - startX, y: y - startY }, imageDimensions, realImageDimensions);
+                        pEnd = { x: pEnd.x + pStart.x, y: pEnd.y + pStart.y }
                         var annot = { name: value, start: pStart, end: pEnd }
                         annot = JSON.stringify(annot);
                         addAnnotList(value, '#annote_area', annot);

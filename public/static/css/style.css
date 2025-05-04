@@ -332,24 +332,99 @@ button {
     text-align: center;
 }
 
-#showImg1 {
+/* image frame */
+
+.tooltip {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    max-width: 150px;
+}
+
+.tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+#showImg {
     width: 80%;
+    height: fit-content;
+    background-color: #1e1f20;
+    box-shadow: 0 6px 60px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#showImg::backdrop {
+    backdrop-filter: blur(5px);
+}
+
+#showImg a {
+    color: white;
+}
+
+#imgZonne div.annot {
+    position: absolute;
+    color: #131314;
+    background-color: #99b7e781;
+    margin: 0 !important;
+}
+
+#showImg>div {
+    gap: 10px;
     height: fit-content;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
-    background-color: #1e1f20;
-    color: white;
-    padding: 30px;
+}
+
+#showImg div:nth-child(3) {
+    margin-top: 15px;
+    justify-content: center !important;
+}
+
+#showImg img {
+    width: min(100%, 350px);
     border-radius: 10px;
 }
 
-#showImg1 img {
-    width: min(100%, 500px);
-    border-radius: 10px;
+#showImg button {
+    width: 24px;
+    height: 24px;
+    float: right;
 }
+
+
+
+#imgZonne {
+    position: relative;
+    display: inline-block;
+    width: max(calc(100% / 2.2), 350px);
+    height: fit-content;
+}
+
+#imgZonne .annot {
+    position: absolute;
+    /* Position absolue par rapport au parent relatif */
+    pointer-events: auto;
+}
+
 
 /*login presentation */
 

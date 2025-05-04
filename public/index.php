@@ -22,8 +22,8 @@ if ($request == '/index.php' || $request == '/') {
     upload();
 } elseif ($request == '/index.php/tag') {
     tag();
-} elseif ($request == '/index.php/tag') {
-    tag();
+} elseif ($request == '/index.php/user') {
+    user();
 } elseif ($request == '/index.php/annotation') {
     annotation();
 } else {

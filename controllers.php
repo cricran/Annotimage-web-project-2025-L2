@@ -4,7 +4,7 @@ function home() {
     session_start();
     $bd = connect_db();
     $r = $bd->prepare("
-    SELECT path, description, username as name, GROUP_CONCAT(name) as tags
+    SELECT image.id, path, description, username as name, GROUP_CONCAT(name) as tags
     FROM image
     JOIN user ON user.id = image.userId
     LEFT JOIN taged ON taged.imageId = image.id 
