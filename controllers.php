@@ -451,14 +451,19 @@ function tag() {
     $totalPages = max(1, ceil($totalImages / $limit));
 
     $r = $bd->prepare("
-    SELECT image.id, path, description, username as name, GROUP_CONCAT(DISTINCT tag.name) as tags
+    SELECT image.id, path, description, username as name, GROUP_CONCAT(tag.name) as tags
     FROM image
     JOIN user ON user.id = image.userId
     LEFT JOIN taged ON taged.imageId = image.id 
     LEFT JOIN tag ON tag.id = taged.tagId
-    WHERE taged.tagId = :tagId AND (public = 1 OR :sessionId = image.userId)
+    WHERE (public = 1 OR :sessionId = image.userId)
     GROUP BY image.id, path, description, username
-    ORDER BY image.date DESC
+    HAVING :tagId IN (
+        SELECT tagId 
+        FROM taged 
+        WHERE taged.imageId = image.id
+    )
+    ORDER BY MAX(date) DESC
     LIMIT $limit OFFSET $offset
     ");
 
@@ -545,7 +550,6 @@ function search() {
     $bd = connect_db();
     $sessionId = $_SESSION['user'] ?? null;
 
-    // Si aucun terme de recherche → comportement home
     if ($query === "") {
         $count = $bd->prepare("
         SELECT COUNT(*) as total
@@ -567,11 +571,8 @@ function search() {
         ORDER BY MAX(date) DESC
         LIMIT $limit OFFSET $offset
         ");
-        $r->execute([
-            'sessionId' => $sessionId]
-        );
+        $r->execute(['sessionId' => $sessionId]);
     } else {
-        // Analyse de la recherche
         $terms = preg_split('/\s+/', $query);
         $users = [];
         $tags = [];
@@ -590,7 +591,6 @@ function search() {
         $params = ['sessionId' => $sessionId];
         $conditions = [];
 
-        // utilisateur -> au moins un doit matcher
         if (!empty($users)) {
             $userConds = [];
             foreach ($users as $index => $user) {
@@ -601,15 +601,13 @@ function search() {
             $conditions[] = '(' . implode(' OR ', $userConds) . ')';
         }
 
-        // tags -> au moins un doit matcher
         if (!empty($tags)) {
             $tagConds = [];
             foreach ($tags as $index => $tag) {
                 $param = "tag$index";
-                $tagConds[] = "tag.name = :$param";
+                $tagConds[] = "t.name = :$param";
                 $params[$param] = $tag;
             }
-            // For tags, we need to match at least one tag per image, so we use EXISTS
             $conditions[] = "(EXISTS (
                 SELECT 1 FROM taged tg
                 JOIN tag t ON t.id = tg.tagId
@@ -617,7 +615,6 @@ function search() {
             ))";
         }
 
-        // description -> au moins un doit matcher
         if (!empty($descs)) {
             $descConds = [];
             foreach ($descs as $index => $desc) {
@@ -630,7 +627,6 @@ function search() {
 
         $whereClause = empty($conditions) ? "1" : implode(" AND ", $conditions);
 
-        // Total
         $count = $bd->prepare("
         SELECT COUNT(DISTINCT image.id) as total
         FROM image
@@ -644,20 +640,18 @@ function search() {
         $totalImages = $count->fetch()['total'];
         $totalPages = max(1, ceil($totalImages / $limit));
 
-        // Données
         $r = $bd->prepare("
         SELECT image.id, path, description, username as name, GROUP_CONCAT(DISTINCT tag.name) as tags
         FROM image
+        JOIN user ON user.id = image.userId
         LEFT JOIN taged ON taged.imageId = image.id
         LEFT JOIN tag ON tag.id = taged.tagId
-        JOIN user ON user.id = image.userId
         WHERE ($whereClause)
           AND (public = 1 OR :sessionId = image.userId)
-        GROUP BY image.id
+        GROUP BY image.id, path, description, username
         ORDER BY MAX(date) DESC
         LIMIT $limit OFFSET $offset
         ");
-        // $params['offset'] = $offset;
         $r->execute($params);
     }
 
@@ -666,6 +660,7 @@ function search() {
 
     require 'templates/search.php';
 }
+
 
 function annotation() {
     session_start();

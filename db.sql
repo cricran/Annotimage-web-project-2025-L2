@@ -37,9 +37,3 @@ create table annotimage.taged (
     foreign key (imageId) references image(id) ON DELETE CASCADE,
     foreign key (tagId) references tag(id) ON DELETE CASCADE
 )engine InnoDB;
-    
-
-
-
-
-
