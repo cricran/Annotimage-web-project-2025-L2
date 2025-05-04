@@ -37,7 +37,7 @@ function confirmDialog(title, message, callback) {
             <h2>${title}</h2>
             <p>${message}</p>
             <div>
-                <button id="cancel">Annuler</button>
+                <button id="cancelDialogue">Annuler</button>
                 <button id="confirm">Valider</button>
             </div>
         </div>
@@ -55,7 +55,7 @@ function confirmDialog(title, message, callback) {
         }
         return false;
     });
-    $('#cancel').on('click', function () {
+    $('#cancelDialogue').on('click', function () {
         dialog.close();
         $('#confirmDialog').remove();
         if (callback) {
@@ -124,7 +124,7 @@ function showImage(id) {
 
         var contenue = `
         <dialog id="showImg">
-            <button id="cancel"><img src="../static/images/close.svg" alt="close"></button>
+            <button id="cancel"><img src="../static/images/close.svg" alt="close" title="Fermer"></button>
             <diV>
                 <div id="imgZonne">
                     <img src="/image.php?image=${data['image']['path']}" alt="${data['image']['description']}" id="imgZonne_img">
@@ -137,12 +137,10 @@ function showImage(id) {
                 </div>
             </div>
             <div>
-                <p>Image :</p>
-                <a href=""><img src="../static/images/edit.svg" alt=""></a>
-                <a href=""><img src="../static/images/del.svg" alt=""></a>
-                <p>Annotation :</p>
-                <a href=""><img src="../static/images/edit.svg" alt=""></a>
-                <a href=""><img src="../static/images/show.svg" alt=""></a>
+                <a href=""><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
+                <a href=""><img src="../static/images/del.svg" alt="suprimer image" id="img_del" title="Suprimer l'image"></a>
+                <a href=""><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Modifier les annotations"></a>
+                <a href=""><img src="../static/images/show.svg" alt="montrer/cacher les annotation" id="mc_annot" title="Rendre visible/invisible les annotations"></a>
             </div>
         </dialog>
         `
@@ -156,6 +154,28 @@ function showImage(id) {
             dialog.remove();
             return;
         });
+
+        $('#mc_annot').on('click', function (e) {
+            e.preventDefault();
+            let img = $(this);
+            if (img.attr('src').includes('show.svg')) {
+                img.attr('src', '../static/images/show_off.svg');
+            } else {
+                img.attr('src', '../static/images/show.svg');
+            }
+            $('.annot').toggle();
+        })
+
+        $('#img_del').on('click', function (e) {
+            e.preventDefault();
+            confirmDialog("Suprimer cette image",
+                "Vous allez supprimer l'image. Êtes vous sure de vouloire continuer ? Toute supression est défnitive",
+                function (val) {
+                    if (val) {
+                        window.location = `/index.php/delete-image?id=${data['image']['id']}&callback=${encodeURIComponent(window.location.href.replace(window.location.origin, ''))}`;
+                    }
+                })
+        })
 
         //Les annotations
         if (data['annotations'] && data['annotations'].length !== 0) {
