@@ -1,5 +1,5 @@
 <?php $title = "Annotimage - Acceuille"?>
-<?php $callback = '/index.php' ?>
+<?php $callback = 'index.php' ?>
 
 <?php ob_start() ?>
 

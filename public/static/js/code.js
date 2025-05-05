@@ -152,9 +152,15 @@ function showImage(id) {
                 </div>
             </div>
             <div>
-                <a href=""><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
-                <a href=""><img src="../static/images/del.svg" alt="suprimer image" id="img_del" title="Suprimer l'image"></a>
-                <a href=""><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Modifier les annotations"></a>
+        `
+        if (data['is_owner']) {
+            contenue += `
+            <a href=""><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
+            <a href=""><img src="../static/images/del.svg" alt="suprimer image" id="img_del" title="Suprimer l'image"></a>
+            <a href=""><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Modifier les annotations"></a>
+            `
+        }
+        contenue += `
                 <a href=""><img src="../static/images/show.svg" alt="montrer/cacher les annotation" id="mc_annot" title="Rendre visible/invisible les annotations"></a>
             </div>
         </dialog>
@@ -192,68 +198,70 @@ function showImage(id) {
                 })
         })
 
-        //Les annotations
         if (data['annotations'] && data['annotations'].length !== 0) {
-            let annotZonne = $('#imgZonne');
-            let image = $('#imgZonne_img');
-            image.on('load', function () {
-                let imageDimensions = {
-                    width: image.width(),
-                    height: image.height()
-                };
-                let realImageDimensions = {
-                    width: image[0].naturalWidth,
-                    height: image[0].naturalHeight
-                };
+            showAnnotations(data['annotations'], '#imgZonne', '#imgZonne_img');
+        }
+    });
+}
 
-                data['annotations'].forEach(function (annotation) {
-                    let div = $('<div class="annot"></div>');
+// showAnnotations : Affiche les annotations annotations dans la zonne annotZonneSelector pour l'image imageSelector
+function showAnnotations(annotations, annotZonneSelector, imageSelector) {
+    let annotZonne = $(annotZonneSelector);
+    let image = $(imageSelector);
+    image.on('load', function () {
+        let imageDimensions = {
+            width: image.width(),
+            height: image.height()
+        };
+        let realImageDimensions = {
+            width: image[0].naturalWidth,
+            height: image[0].naturalHeight
+        };
 
-                    let start = translatePoint({ x: annotation.startX, y: annotation.startY }, realImageDimensions, imageDimensions);
-                    let end = translatePoint({ x: annotation.endX, y: annotation.endY }, realImageDimensions, imageDimensions);
+        annotations.forEach(function (annotation) {
+            let div = $('<div class="annot"></div>');
 
-                    let offset = image.position();
-                    let left = Math.min(start.x, end.x) + offset.left;
-                    let top = Math.min(start.y, end.y) + offset.top;
-                    let width = Math.abs(end.x - start.x);
-                    let height = Math.abs(end.y - start.y);
+            let start = translatePoint({ x: annotation.startX, y: annotation.startY }, realImageDimensions, imageDimensions);
+            let end = translatePoint({ x: annotation.endX, y: annotation.endY }, realImageDimensions, imageDimensions);
 
-                    div.css({
-                        // "position": "absolute",
-                        "left": left + "px",
-                        "top": top + "px",
-                        "width": width + "px",
-                        "height": height + "px",
-                        "pointerEvents": "auto"
-                    });
-                    div.on('mousemove', function (e) {
-                        let tooltip = $('#annotation-tooltip');
-                        if (tooltip.length === 0) {
-                            tooltip = $('<div id="annotation-tooltip" class="tooltip"></div>');
-                            $('body').append(tooltip);
-                        }
-                        tooltip.text(annotation['description']);
-                        tooltip.css({
-                            visibility: 'visible',
-                            opacity: 1,
-                            position: 'fixed',
-                            left: (e.clientX - tooltip.outerWidth() / 2) + 'px',
-                            top: (e.clientY - tooltip.outerHeight() - 10) + 'px',
-                            zIndex: 9999,
-                            pointerEvents: 'none'
-                        });
-                    });
-                    div.on('mouseleave', function () {
-                        $('#annotation-tooltip').css({
-                            visibility: 'hidden',
-                            opacity: 0
-                        });
-                    });
-                    annotZonne.append(div);
+            let offset = image.position();
+            let left = Math.min(start.x, end.x) + offset.left;
+            let top = Math.min(start.y, end.y) + offset.top;
+            let width = Math.abs(end.x - start.x);
+            let height = Math.abs(end.y - start.y);
+
+            div.css({
+                "left": left + "px",
+                "top": top + "px",
+                "width": width + "px",
+                "height": height + "px",
+                "pointerEvents": "auto"
+            });
+            div.on('mousemove', function (e) {
+                let tooltip = $('#annotation-tooltip');
+                if (tooltip.length === 0) {
+                    tooltip = $('<div id="annotation-tooltip" class="tooltip"></div>');
+                    $('body').append(tooltip);
+                }
+                tooltip.text(annotation['description']);
+                tooltip.css({
+                    visibility: 'visible',
+                    opacity: 1,
+                    position: 'fixed',
+                    left: (e.clientX - tooltip.outerWidth() / 2) + 'px',
+                    top: (e.clientY - tooltip.outerHeight() - 10) + 'px',
+                    zIndex: 9999,
+                    pointerEvents: 'none'
                 });
             });
-        }
-
+            div.on('mouseleave', function () {
+                $('#annotation-tooltip').css({
+                    visibility: 'hidden',
+                    opacity: 0
+                });
+            });
+            annotZonne.append(div);
+        });
     });
 }
 

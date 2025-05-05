@@ -1,4 +1,5 @@
 <?php $title = "Annotimage - utilisateur"?>
+<?php $callback = 'index.php/user' ?>
 
 <?php ob_start() ?>
 

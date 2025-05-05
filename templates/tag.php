@@ -1,4 +1,5 @@
 <?php $title = "Annotimage - tags"?>
+<?php $callback = 'index.php/tag' ?>
 
 <?php ob_start() ?>
 

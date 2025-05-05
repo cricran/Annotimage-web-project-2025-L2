@@ -45,7 +45,7 @@ function createImage($info) {?>
             <img src="/image.php?image=<?= $info['path']?>" alt="<?= $info['description']?>">
         </div>
         <h2><?= $info['description']?></h2>
-        <p><a href="/index.php/user?user=<?= $info['name']?>">@<?= $info['name']?></a></p>
+        <p><a href="/index.php/user?user=<?= urlencode($info['name'])?>">@<?= $info['name']?></a></p>
         <p>
         <?php
         if (!empty($info['tags'])) {
@@ -55,7 +55,7 @@ function createImage($info) {?>
         }
         ?>
         <?php foreach($tags as $tag) : ?>
-            <a href="/index.php/tag?tag=<?=$tag?>">#<?=$tag?></a>
+            <a href="/index.php/tag?tag=<?=urlencode($tag)?>">#<?=$tag?></a>
         <?php endforeach; ?>
         </p>
     </article>

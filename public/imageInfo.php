@@ -53,9 +53,7 @@ $r = $bd->prepare("
 $r->execute([':id' => $_GET['id']]);
 $annotations = $r->fetchAll();
 
-
-
-
+$ownedByUser = isset($_SESSION['user']) && $_SESSION['user'] == $image['userId'];
 $response = [
     'image' => [
         'id' => $image['id'],
@@ -69,7 +67,8 @@ $response = [
         ]
     ],
     'tags' => $tags,
-    'annotations' => $annotations
+    'annotations' => $annotations,
+    'is_owner' => $ownedByUser
 ];
 
 // Envoi de la réponse
