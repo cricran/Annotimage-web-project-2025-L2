@@ -661,7 +661,6 @@ function search() {
     require 'templates/search.php';
 }
 
-
 function annotation() {
     session_start();
     if (!isset($_SESSION['user'])) {
@@ -675,6 +674,12 @@ function annotation() {
             return;
         }
         $bd = connect_db();
+
+        $r = $bd->prepare("DELETE FROM annotation WHERE imageId = :imageId");
+        $r->execute([':imageId' => $_POST['id']]);
+
+        var_dump($_POST['annot']);
+
         foreach ($_POST['annot'] as $annot) {
             $json = json_decode($annot, true);
             $name = htmlspecialchars($json['name'], ENT_QUOTES, 'UTF-8');
@@ -701,7 +706,7 @@ function annotation() {
                 return;
             }
         }
-        addNotification('success', 'Succès', 'Les annotation ont été ajouté');
+        addNotification('success', 'Succès', 'Les annotation ont été mise à jour');
         if (isset($_POST['callback'])) {
             header('Location: /' . $_POST['callback']);
         } else {

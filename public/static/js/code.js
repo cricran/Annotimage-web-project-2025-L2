@@ -157,7 +157,7 @@ function showImage(id) {
             contenue += `
             <a href=""><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
             <a href=""><img src="../static/images/del.svg" alt="suprimer image" id="img_del" title="Suprimer l'image"></a>
-            <a href=""><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Modifier les annotations"></a>
+            <a href="/index.php/annotation?id=${id}"><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Ajouter/modifier les annotations"></a>
             `
         }
         contenue += `
@@ -206,9 +206,11 @@ function showImage(id) {
 
 // showAnnotations : Affiche les annotations annotations dans la zonne annotZonneSelector pour l'image imageSelector
 function showAnnotations(annotations, annotZonneSelector, imageSelector) {
+    console.log('toto');
     let annotZonne = $(annotZonneSelector);
     let image = $(imageSelector);
     image.on('load', function () {
+        console.log(annotations, 'toto');
         let imageDimensions = {
             width: image.width(),
             height: image.height()
@@ -264,6 +266,59 @@ function showAnnotations(annotations, annotZonneSelector, imageSelector) {
         });
     });
 }
+
+function showAnnotationsNoWait(annotations, annotZonneSelector, imageSelector, imageDimensions, realImageDimensions) {
+    console.log('toto');
+    let annotZonne = $(annotZonneSelector);
+    let image = $(imageSelector);
+    console.log(annotations, 'toto');
+
+    annotations.forEach(function (annotation) {
+        let div = $('<div class="annot"></div>');
+
+        let start = translatePoint({ x: annotation.startX, y: annotation.startY }, realImageDimensions, imageDimensions);
+        let end = translatePoint({ x: annotation.endX, y: annotation.endY }, realImageDimensions, imageDimensions);
+
+        let offset = image.position();
+        let left = Math.min(start.x, end.x) + offset.left;
+        let top = Math.min(start.y, end.y) + offset.top;
+        let width = Math.abs(end.x - start.x);
+        let height = Math.abs(end.y - start.y);
+
+        div.css({
+            "left": left + "px",
+            "top": top + "px",
+            "width": width + "px",
+            "height": height + "px",
+            "pointerEvents": "auto"
+        });
+        div.on('mousemove', function (e) {
+            let tooltip = $('#annotation-tooltip');
+            if (tooltip.length === 0) {
+                tooltip = $('<div id="annotation-tooltip" class="tooltip"></div>');
+                $('body').append(tooltip);
+            }
+            tooltip.text(annotation['description']);
+            tooltip.css({
+                visibility: 'visible',
+                opacity: 1,
+                position: 'fixed',
+                left: (e.clientX - tooltip.outerWidth() / 2) + 'px',
+                top: (e.clientY - tooltip.outerHeight() - 10) + 'px',
+                zIndex: 9999,
+                pointerEvents: 'none'
+            });
+        });
+        div.on('mouseleave', function () {
+            $('#annotation-tooltip').css({
+                visibility: 'hidden',
+                opacity: 0
+            });
+        });
+        annotZonne.append(div);
+    });
+}
+
 
 // List dynamique
 

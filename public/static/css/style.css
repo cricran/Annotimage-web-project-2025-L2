@@ -377,7 +377,7 @@ button {
     color: white;
 }
 
-#imgZonne div.annot {
+.annot {
     position: absolute;
     color: #131314;
     background-color: #99b7e781;
@@ -721,6 +721,7 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 6px 60px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.4);
     color: white;
+    min-height: 600px;
 }
 
 #annote #form {
@@ -795,6 +796,8 @@ span {
 #annote_area {
     margin: 0;
     margin-bottom: 15px;
+    max-height: 75px;
+    overflow: auto;
 }
 
 #annote_area div {
