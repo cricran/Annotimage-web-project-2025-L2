@@ -1,5 +1,6 @@
 <?php
 
+// Renvoit un objet de base de donné connecter grâce aux informations de connection renseigné dans config.php
 function connect_db () {
     include 'config.php';
     
@@ -12,6 +13,8 @@ function disconnect_db (&$db) {
 }
 
 // Notification
+
+// Ajoute une nouvelle entité notification à la liste de notifications. La notification à un type à choisir entre "error", "success", "info" ou "warning" avec le titre $titre et un corps de message $message
 function addNotification($type, $title, $message) {
     if (!isset($_SESSION)) {
         session_start();
@@ -23,6 +26,7 @@ function addNotification($type, $title, $message) {
     $_SESSION['notifications'][] = ['type' => $type, 'title' => $title, 'message' => $message];
 }
 
+// Renvoit la liste des notification. Toute les notifications sont supprimé après cette appele
 function getNotifications() {
     if (!isset($_SESSION)) {
         session_start();
@@ -32,15 +36,9 @@ function getNotifications() {
     return $notifications;
 }
 
-function clearNotifications() {
-    if (!isset($_SESSION)) {
-        session_start();
-    }
-    $_SESSION['notifications'] = [];
-}
-
 // Images
 
+// Créer une entité image avec l'image en elle même, ça description et tag si il y en a à partir de $info
 function createImage($info) {?>
     <article id="<?= $info['id']?>">
         <div>
@@ -64,6 +62,7 @@ function createImage($info) {?>
 <?php
 }
 
+// Affiche l'enssemble des images rensigné dans le tableau $info
 function displayImages($infos) {
     if ($infos === []) {
         echo '<p>Aucune images à afficher</p>';
@@ -77,6 +76,7 @@ function displayImages($infos) {
 
 // Pages
 
+// Créer la pagination de bas de page avec la page $page sélectionné en sachant qu'il y a $nbPage. Attribur représente le chemin relatif vers la page actuell et querry les éventuels éléments suplémentire à ajouter pour l'appele des prochaines pages
 function createPageIndex($page, $nbPage, $attribut, $query) {
     if ($nbPage === 1) return;
     echo "<p>";

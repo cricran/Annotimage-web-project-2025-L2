@@ -2,6 +2,7 @@
 // Load
 $(document).ready(function () {
     showNotifications();
+    // Rend toutes les images clickable pour l'affichage en pleine écrant.
     $('article').on('click', function () {
         const id = $(this).attr('id');
         if (id) {
@@ -11,6 +12,8 @@ $(document).ready(function () {
 });
 
 // Notification
+
+// showNotifications : Affiche l'ensemble des notifications définie sur la page et programmme leur suppression automatique
 function showNotifications() {
     var notif = $("#notification div");
     notif.toggleClass("show");
@@ -22,6 +25,7 @@ function showNotifications() {
     }, 10000);
 }
 
+// hideNotifications : Supprime la notification associé à notif
 function hideNotifications(notif) {
     notif.removeClass("show");
     setTimeout(function () {
@@ -30,6 +34,10 @@ function hideNotifications(notif) {
 }
 
 // Confirmation dialog
+
+// confirmDialog : Affiche une fenêtre modale de confirmation avec comme titre title, comme message 
+//  message et qui renvoit true ou false cellon le choix effectué par l'utilisateur à la fonction 
+//  callback si elle est donné
 function confirmDialog(title, message, callback) {
     var contenue = `
     <dialog id="confirmDialog" class="dialog">
@@ -64,6 +72,8 @@ function confirmDialog(title, message, callback) {
     });
 }
 
+// confirmDialogText : Meme chose que confirmDialog mais renvoit à callback le texte saisie par 
+//  l'utilisateur et non un boolean
 function confirmDialogText(title, message, callback) {
     var contenue = `
     <dialog id="confirmDialog" class="dialog">
@@ -100,6 +110,8 @@ function confirmDialogText(title, message, callback) {
     });
 }
 
+// handleFormSubmit : Envoit le formulaire associé à event si l'utilisateur confirme sont choix après 
+//  l'apparition d'une fenêtre modale de titre dialogTitle et de message dialogMessage
 function handleFormSubmit(event, dialogTitle, dialogMessage) {
     event.preventDefault();
     var form = $(event.target);
@@ -112,6 +124,9 @@ function handleFormSubmit(event, dialogTitle, dialogMessage) {
 }
 
 // Image show
+
+// showImage : Tente d'afficher l'image d'identifiant id dans une fenêtre modale avec les options 
+//  asscocié pour cette image
 function showImage(id) {
     $.getJSON(`/imageInfo.php?id=${id}`, function (data) {
         // L'image
@@ -243,6 +258,8 @@ function showImage(id) {
 }
 
 // List dynamique
+
+// addTagList : Ajoute à l'emplacement place un tag avec le le nom nom
 function addTagList(name, place) {
     var content = `
     <div>
@@ -258,6 +275,8 @@ function addTagList(name, place) {
     })
 }
 
+// addAnnotList : Ajoute à l'emplacement place une annotation avec le le nom nom et asscocié à la valeur 
+//  valeur
 function addAnnotList(name, place, value) {
     var content = `
     <div>
@@ -273,7 +292,9 @@ function addAnnotList(name, place, value) {
     })
 }
 
-// translate point
+// point
+
+// translatePoint : Renvoit la traduction du point point définie de base srcRect dans la base destRect
 function translatePoint(point, srcRect, destRect) {
     return {
         x: (point.x * (destRect.width / srcRect.width)),
