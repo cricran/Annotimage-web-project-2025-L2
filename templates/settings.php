@@ -3,7 +3,7 @@
 
 <?php ob_start() ?>
     <div id="setting_page">
-        <a href="<?php echo isset($_GET["callback"]) ? $_GET["callback"] : '/index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+        <a href="/<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
         <div>
             <section>
                 <h2>Paramètres</h2>

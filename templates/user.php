@@ -1,5 +1,5 @@
 <?php $title = "Annotimage - utilisateur"?>
-<?php $callback = 'index.php/user' ?>
+<?php $callback = 'index.php/user?user=' . urlencode($_GET['user']) ?>
 
 <?php ob_start() ?>
 
