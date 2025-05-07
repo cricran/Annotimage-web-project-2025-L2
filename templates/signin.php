@@ -14,7 +14,7 @@
             </ul>
         </section>
         <section id="login">
-            <a href="<?= isset($_GET["callback"]) ? '/'.urlencode($_GET["callback"]) : '/index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+            <a href="<?= isset($_GET["callback"]) ? urlencode($_GET["callback"]) : '/index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
             <h2>Se connecter</h2>
             <p>Vous n'avez pas de compte? <a href="/index.php/signup<?= '?callback=' . (isset($_GET['callback']) ? urlencode($_GET['callback']) : 'index.php'); ?>">s'inscrire</a></p>
             <form action="/index.php/signin" method="POST">

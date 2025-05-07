@@ -25,10 +25,10 @@ function home() {
 function signup() {
     session_start();
     if(isset($_POST['email'])) {
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
-        $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
-        $password2 = htmlspecialchars($_POST['password2'], ENT_QUOTES, 'UTF-8');
+        $email = trim(filter_var($_POST['email'], FILTER_SANITIZE_EMAIL));
+        $username = trim(htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'));
+        $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+        $password2 = trim(htmlspecialchars($_POST['password2'], ENT_QUOTES, 'UTF-8'));
 
         $issue = false;
 
@@ -115,8 +115,8 @@ function signin() {
     if(isset($_POST['email_pseudo'])) {
         session_regenerate_id(); 
 
-        $email_pseudo = htmlspecialchars($_POST['email_pseudo'], ENT_QUOTES, 'UTF-8');
-        $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
+        $email_pseudo = trim(htmlspecialchars($_POST['email_pseudo'], ENT_QUOTES, 'UTF-8'));
+        $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
 
         $bd = connect_db();
         $r_user = $bd->prepare("SELECT * FROM user WHERE email = :email OR username = :username");
@@ -174,10 +174,10 @@ function settings() {
     }
 
     if (isset($_POST['modif'])) {
-        $pseudo = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
-        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-        $password = htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8');
-        $password2 = htmlspecialchars($_POST['password2'], ENT_QUOTES, 'UTF-8');
+        $pseudo = trim(htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'));
+        $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+        $password = trim(htmlspecialchars($_POST['password'], ENT_QUOTES, 'UTF-8'));
+        $password2 = trim(htmlspecialchars($_POST['password2'], ENT_QUOTES, 'UTF-8'));
         $issue = false;
 
         if (!empty($email) && $email !== $_SESSION['email']) {
@@ -250,7 +250,6 @@ function settings() {
     }
 
     if (isset($_POST['delete'])) {
-        echo "delete";
         $bd = connect_db();
 
         $r_images = $bd->prepare("SELECT path FROM image WHERE userId = :id");
@@ -306,8 +305,9 @@ function upload() {
 
         $issue = false;
 
-        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
-        $date = htmlspecialchars($_POST['date'], ENT_QUOTES, 'UTF-8');
+        
+        $description = trim(htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8'));
+        $date = trim(htmlspecialchars($_POST['date'], ENT_QUOTES, 'UTF-8'));
         
         if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $date) || !strtotime($date)) {
             addNotification('error', 'Erreur', 'Format de date invalide (YYYY-MM-DD HH:MM:SS)');
@@ -388,6 +388,13 @@ function upload() {
         #Ajout de tout les tags à la bd
         foreach ($_POST['tags'] as $tag) {
             // tag exist ???
+            $tag = trim(htmlspecialchars($tag, ENT_QUOTES, 'UTF-8'));
+            if (strlen($tag) > 64) {
+                addNotification('error', 'Erreur', 'Le tag doit faire au plus 64 caractères');
+                require 'templates/upload.php';
+                return;
+            }
+
             $r = $bd->prepare("SELECT id FROM tag WHERE name = :name");
             $r->execute([':name' => $tag]);
             if (!$r) {
@@ -721,7 +728,7 @@ function annotation() {
 
         foreach ($_POST['annot'] as $annot) {
             $json = json_decode($annot, true);
-            $name = htmlspecialchars($json['name'], ENT_QUOTES, 'UTF-8');
+            $name = trim(htmlspecialchars($json['name'], ENT_QUOTES, 'UTF-8'));
             if (strlen($name) > 1024) {
                 addNotification('error', 'Erreur', 'L\'annotation "'.$name.'" continet trop de carractères et n\'a pas put être ajouté. Cependant, toutes les annottations précédente à celle ci ont été ajouté.');
                 header('Location: /index.php/annotation');
@@ -816,7 +823,7 @@ function update() {
             exit();
         }
         
-        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
+        $description = trim(htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8'));
         $date = htmlspecialchars($_POST['date'], ENT_QUOTES, 'UTF-8');
         $issue = false;
         if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $date) || !strtotime($date)) {

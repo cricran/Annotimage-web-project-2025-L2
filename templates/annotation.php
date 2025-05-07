@@ -6,7 +6,7 @@
 
     <div id="center">
         <div id="annote">
-        <a href="/<?php echo isset($_GET["callback"]) ? urlencode($_GET["callback"]) : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+        <a href="/<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
 
             <h2>Ajouter des annotationa en sélectionnant une zonne sur l'image</h2>
             <form action="" id="form" method="POST">

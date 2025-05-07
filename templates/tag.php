@@ -1,5 +1,5 @@
 <?php $title = "Annotimage - tags"?>
-<?php $callback = 'index.php/tag' . (urlencode($_GET['tag']) ?? '') ?>
+<?php $callback = 'index.php/tag?tag=' . (urlencode($_GET['tag']) ?? '') ?>
 
 <?php ob_start() ?>
 

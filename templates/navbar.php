@@ -7,7 +7,7 @@
         <?php if (!isset($_SESSION['user'])): ?>
             <div class="buttons">
                 <a id="signup" href="/index.php/signup?callback=<?=  urlencode($callback) ?>">S'inscrire</a>
-                <a id="signin" href="/index.php/signin?callback=<?php urlencode($callback) ?>"></a>
+                <a id="signin" href="/index.php/signin?callback=<?= urlencode($callback) ?>"></a>
             </div>
         <?php else: ?>
             <div class="buttons">
