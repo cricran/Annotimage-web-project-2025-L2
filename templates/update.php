@@ -6,14 +6,14 @@
 
     <div id="center">
         <div id="upload">
-            <a href="/<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+            <a href="/<?= isset($_GET["callback"]) ? urlencode($_GET["callback"]) : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
             <h2>Mofifier une image</h2>
             <form action="" id="form" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
+                <input type="hidden" name="callback" value="<?= isset($_GET['callback']) ? htmlspecialchars($_GET['callback']) : 'index.php'; ?>">
                 <input type="hidden" name="id" id="id" value="<?=$id?>">
                 
                 <div>
-                    <img id="image_selected" src="/image.php?image=<?=$path?>" alt="Image" />
+                    <img id="image_selected" src="/image.php?image=<?=urlencode($path)?>" alt="Image" />
                 </div>
                 <div>
                     <textarea type="text" placeholder="Description" name="description" required><?= $description ?></textarea>

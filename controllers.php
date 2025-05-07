@@ -96,7 +96,7 @@ function signup() {
         }
         disconnect_db($bd);
         $callback = isset($_POST['callback']) ? $_POST['callback'] : 'index.php';
-        addNotification('success', 'Succès', 'Inscription réussie ! Vous <a href="/index.php/signin?callback=' . $callback . '">pouvez vous connecter</a> maintenant');
+        addNotification('success', 'Succès', 'Inscription réussie ! Vous pouvez vous connecter maintenant');
 
         if (isset($_POST['callback'])) {
             header('Location: /' . $_POST['callback']);
@@ -832,7 +832,11 @@ function update() {
             $issue = true;
         }
         if ($issue) {
-            require 'templates/update.php';
+            if (isset($_POST['callback'])) {
+                header('Location: /' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
             return;
         }
         $r = $bd->prepare("
@@ -848,23 +852,44 @@ function update() {
         ]);
         if (!$r) {
             addNotification('error', 'Erreur', 'Erreur lors de la mise à jour de l\'image');
-            require 'templates/update.php';
+            if (isset($_POST['callback'])) {
+                header('Location: /' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
             return;
         }
         $r = $bd->prepare("DELETE FROM taged WHERE imageId = :imageId");
         $r->execute([':imageId' => $_POST['id']]);
         if (!$r) {
             addNotification('error', 'Erreur', 'Erreur lors de la mise à jour des tags');
-            require 'templates/update.php';
+            if (isset($_POST['callback'])) {
+                header('Location: /' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
             return;
         }
         foreach ($_POST['tags'] as $tag) {
+            if (strlen($tag) > 64) {
+                addNotification('error', 'Erreur', 'Un tag doit faire au plus 64 caractères');
+                if (isset($_POST['callback'])) {
+                    header('Location: /' . $_POST['callback']);
+                } else {
+                    header('Location: /index.php');
+                }
+                return;
+            }
             // tag exist ???
             $r = $bd->prepare("SELECT id FROM tag WHERE name = :name");
             $r->execute([':name' => $tag]);
             if (!$r) {
                 addNotification('error', 'Erreur', 'Erreur lors de la vérification des tags');
-                require 'templates/update.php';
+                if (isset($_POST['callback'])) {
+                    header('Location: /' . $_POST['callback']);
+                } else {
+                    header('Location: /index.php');
+                }
                 return;
             }
             
@@ -876,7 +901,11 @@ function update() {
                 $r->execute([':name' => $tag]);
                 if (!$r) {
                     addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
-                    require 'templates/update.php';
+                    if (isset($_POST['callback'])) {
+                        header('Location: /' . $_POST['callback']);
+                    } else {
+                        header('Location: /index.php');
+                    }
                     return;
                 }
                 $tag_id = $bd->lastInsertId();
@@ -888,7 +917,11 @@ function update() {
             ]);
             if (!$r) {
                 addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
-                require 'templates/update.php';
+                if (isset($_POST['callback'])) {
+                    header('Location: /' . $_POST['callback']);
+                } else {
+                    header('Location: /index.php');
+                }
                 return;
             }
         }

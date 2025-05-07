@@ -6,13 +6,13 @@
 
         <?php if (!isset($_SESSION['user'])): ?>
             <div class="buttons">
-                <a id="signup" href="/index.php/signup?callback=<?php echo $callback ?>">S'inscrire</a>
-                <a id="signin" href="/index.php/signin?callback=<?php echo $callback ?>"></a>
+                <a id="signup" href="/index.php/signup?callback=<?=  urlencode($callback) ?>">S'inscrire</a>
+                <a id="signin" href="/index.php/signin?callback=<?php urlencode($callback) ?>"></a>
             </div>
         <?php else: ?>
             <div class="buttons">
-                <a id="profile" href="/index.php/user?user=<?php echo $_SESSION['username'] ?>">Mon profil</a>
-                <a id="settings" href="/index.php/settings?callback=<?php echo $callback ?>"><img src="../static/images/settings.svg" alt="settings"></a>
+                <a id="profile" href="/index.php/user?user=<?= urlencode($_SESSION['username']) ?>">Mon profil</a>
+                <a id="settings" href="/index.php/settings?callback=<?= urlencode($callback) ?>"><img src="../static/images/settings.svg" alt="settings"></a>
             </div>
         <?php endif; ?>    
 </header>

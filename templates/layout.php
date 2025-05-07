@@ -10,7 +10,7 @@
     <?php if (isset($script)): ?>
         <script src="<?= $script ?>"></script>
     <?php endif; ?>
-    <title><?= $title ?></title>
+    <title><?= htmlspecialchars($title) ?></title>
 </head>
 <body>
     <?= $content ?>

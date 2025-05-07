@@ -6,10 +6,10 @@
 
     <div id="center">
         <div id="upload">
-            <a href="/<?php echo isset($_GET["callback"]) ? $_GET["callback"] : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+            <a href="/<?= isset($_GET["callback"]) ? urlencode($_GET["callback"]) : 'index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
             <h2>Ajouter une image</h2>
             <form action="/index.php/upload" id="form" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
+                <input type="hidden" name="callback" value="<?= isset($_GET['callback']) ? urlencode($_GET['callback']) : 'index.php'; ?>">
                 <div>
                     <img id="imagePreview" src="../static/images/no_image.svg" alt="Image Preview"/>
                     <br>

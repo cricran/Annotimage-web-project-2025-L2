@@ -1,5 +1,6 @@
 <?php $title = "Annotimage - Acceuille"?>
 <?php $callback = 'index.php' ?>
+<?php $script = '../static/js/home.js' ?>
 
 <?php ob_start() ?>
 
@@ -23,38 +24,6 @@
 </section>
 
 <a href="/index.php/search" class="seeMore">Voir plus d'images</a>
-
-<!-- <dialog id="showImg">
-    <div>
-        <img src="/image.php?image=40.jpeg" usemap="#image-map" alt="image">
-        <div id="tooltip"></div>
-        <div>
-            <h2>Une image du film Dune (2021)</h2>
-            <p>Utilisateur : @myuser</p>
-            <p>Tags : #cinema, #film, #dune</p>
-        </div>
-    </div>
-    <div>
-        <p>Image :</p>
-        <a href=""><img src="../static/images/edit.svg" alt=""></a>
-        <a href=""><img src="../static/images/del.svg" alt=""></a>
-        <p>Annotation :</p>
-        <a href=""><img src="../static/images/edit.svg" alt=""></a>
-        <a href=""><img src="../static/images/show.svg" alt=""></a>
-    </div>
-</dialog> -->
-
-<script>
-    window.addEventListener('scroll', function () {
-        const searchBar = document.getElementById('searchBarTop');
-        if (window.scrollY > 300) {
-            searchBar.classList.add('show');
-        } else {
-            searchBar.classList.remove('show');
-        }
-    });
-
-</script>
 
 <?php $content = ob_get_clean() ?>
 

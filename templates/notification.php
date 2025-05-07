@@ -28,10 +28,10 @@ if ($notif === []){
             <div class="<?= $notification['type'] ?>">
                 <button><img src="../static/images/close.svg" alt="close"></button>
                 <h2>
-                    <img src="../static/images/<?= $icon ?>" alt="<?= $notification['type'] ?>">
-                    <?= $notification['title'] ?>
+                    <img src="../static/images/<?= $icon ?>" alt="<?= urlencode($notification['type']) ?>">
+                    <?= htmlspecialchars($notification['title']) ?>
                 </h2>
-                <p><?= $notification['message'] ?></p>
+                <p><?= htmlspecialchars($notification['message']) ?></p>
             </div>
         
     <?php endforeach; ?>

@@ -14,15 +14,15 @@
             </ul>
         </section>
         <section id="login">
-        <a href="<?php echo isset($_GET["callback"]) ? '/'.$_GET["callback"] : '/index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
+        <a href="<?= isset($_GET["callback"]) ? '/'.urlencode($_GET["callback"]) : '/index.php' ?>"><img src="../static/images/close.svg" alt="close"></a>
         <h2>S'inscrire</h2>
-            <p>Vous avez déjas un compte? <a href="/index.php/signin<?php echo '?callback=' . (isset($_GET['callback']) ? $_GET['callback'] : 'index.php'); ?>">se connecter</a></p>
+            <p>Vous avez déjas un compte? <a href="/index.php/signin<?= '?callback=' . (isset($_GET['callback']) ? urlencode($_GET['callback']) : 'index.php'); ?>">se connecter</a></p>
             <form action="/index.php/signup" method="post">
                 <input type="email" placeholder="email" required name="email" maxlength="255">
                 <input type="text" placeholder="pseudo" required name="username" maxlength="64">
                 <input type="password" placeholder="mot de passe" required name="password">
                 <input type="password" placeholder="vérifier votre mot de passe" required name="password2">
-                <input type="hidden" name="callback" value="<?php echo isset($_GET['callback']) ? $_GET['callback'] : 'index.php'; ?>">
+                <input type="hidden" name="callback" value="<?= isset($_GET['callback']) ? urlencode($_GET['callback']) : 'index.php'; ?>">
                 <button type="submit">S'inscrire</button>
             </form>
         </section>

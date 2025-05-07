@@ -1,5 +1,5 @@
 <?php $title = "Annotimage - tags"?>
-<?php $callback = 'index.php/search' ?>
+<?php $callback = 'index.php/search?q=' . (isset($_GET['q']) ? urlencode($_GET['q']) : '') . '&page=' . (isset($_GET['page']) ? urlencode($_GET['page']) : ''); ?>
 
 <?php ob_start() ?>
 
