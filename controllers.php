@@ -99,7 +99,7 @@ function signup() {
         addNotification('success', 'Succès', 'Inscription réussie ! Vous <a href="/index.php/signin?callback=' . $callback . '">pouvez vous connecter</a> maintenant');
 
         if (isset($_POST['callback'])) {
-            header('Location: ' . $_POST['callback']);
+            header('Location: /' . $_POST['callback']);
         } else {
             header('Location: /index.php');
         }
@@ -250,7 +250,20 @@ function settings() {
     }
 
     if (isset($_POST['delete'])) {
+        echo "delete";
         $bd = connect_db();
+
+        $r_images = $bd->prepare("SELECT path FROM image WHERE userId = :id");
+        $r_images->execute([':id' => $_SESSION['user']]);
+        $images = $r_images->fetchAll();
+
+        foreach ($images as $image) {
+            $imagePath = __DIR__ . '/../images/' . $image['path'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $r_delete = $bd->prepare("DELETE FROM user WHERE id = :id");
         $r_delete->execute([':id' => $_SESSION['user']]);
         if (!$r_delete) {
@@ -258,6 +271,15 @@ function settings() {
             require 'templates/settings.php';
             return;
         }
+
+        $r_delete_unused_tags = $bd->prepare("
+        DELETE FROM tag 
+        WHERE id NOT IN (
+            SELECT DISTINCT tagId 
+            FROM taged
+        )");
+        $r_delete_unused_tags->execute();
+
         $_SESSION['user'] = null;
         addNotification('info', 'Information', 'Compte supprimé avec succès');
         header('Location: /index.php');
@@ -308,7 +330,6 @@ function upload() {
                 $issue = true;
             } else {
                 if (preg_match('#^[a-z]+/([a-z0-9\-\.\+]+)$#i', $_FILES['fileInput']['type'], $f_type)) {
-                    var_dump($f_type);
                     $f_type =  $f_type[1];
                 }
                 
@@ -541,7 +562,7 @@ function user() {
 
 function search() {
     session_start();
-    $limit = 12;
+    $limit = 6;
     $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
     $offset = ($page - 1) * $limit;
     $query = isset($_GET['q']) ? trim($_GET['q']) : "";
@@ -673,12 +694,30 @@ function annotation() {
             header('Location: /index.php/annotation');
             return;
         }
+
         $bd = connect_db();
 
+        $r = $bd->prepare("
+        SELECT *
+        FROM image
+        WHERE id = :id AND userId = :sessionId
+        ");
+        $r->execute([
+            ':id' => $_POST['id'] ?? null, 
+            ':sessionId' => $_SESSION['user']
+        ]);
+        if ($r->rowCount() != 1) {
+            addNotification('error', 'Erreur', 'L\'image n\'existe pas ou vous n\'avez pas les droits pour la modifier');
+            if (isset($_POST['callback'])) {
+                header('Location: ' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
+            exit();
+        }
+        
         $r = $bd->prepare("DELETE FROM annotation WHERE imageId = :imageId");
         $r->execute([':imageId' => $_POST['id']]);
-
-        var_dump($_POST['annot']);
 
         foreach ($_POST['annot'] as $annot) {
             $json = json_decode($annot, true);
@@ -739,6 +778,167 @@ function annotation() {
     
         require 'templates/annotation.php';
     }
+}
+
+function update() {
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        addNotification('error', 'Erreur', 'Vous devez être connecter pour accéder à cette page');
+        header('Location: /index.php');
+        return;
+    } 
+    
+    if (isset($_POST['update'])) {
+        if(!isset($_POST['id'])) {
+            addNotification('error', 'Erreur', 'Erreur lors de la mise à jour de l\'image (id)');
+            header('Location: /index.php');
+            return;
+        }
+
+        $bd = connect_db();
+
+        $r = $bd->prepare("
+        SELECT *
+        FROM image
+        WHERE id = :id AND userId = :sessionId
+        ");
+        $r->execute([
+            ':id' => $_POST['id'] ?? null, 
+            ':sessionId' => $_SESSION['user']
+        ]);
+        if ($r->rowCount() != 1) {
+            addNotification('error', 'Erreur', 'L\'image n\'existe pas ou vous n\'avez pas les droits pour la modifier');
+            if (isset($_POST['callback'])) {
+                header('Location: ' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
+            exit();
+        }
+        
+        $description = htmlspecialchars($_POST['description'], ENT_QUOTES, 'UTF-8');
+        $date = htmlspecialchars($_POST['date'], ENT_QUOTES, 'UTF-8');
+        $issue = false;
+        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $date) || !strtotime($date)) {
+            addNotification('error', 'Erreur', 'Format de date invalide (YYYY-MM-DD HH:MM:SS)');
+            $issue = true;
+        }
+        if (strlen($description) > 1024) {
+            addNotification('error', 'Erreur', 'La description doit faire au plus 1024 caractères');
+            $issue = true;
+        }
+        if (strlen($description) < 5) {
+            addNotification('error', 'Erreur', 'La description doit faire au moins 5 caractères');
+            $issue = true;
+        }
+        if ($issue) {
+            require 'templates/update.php';
+            return;
+        }
+        $r = $bd->prepare("
+        UPDATE image 
+        SET description = :description, date = :date, public = :public 
+        WHERE id = :id"
+        );
+        $r->execute([
+            ':description' => $description,
+            ':date' => $date,
+            ':public' => $_POST['public'] === null ? 0 : 1,
+            ':id' => $_POST['id']
+        ]);
+        if (!$r) {
+            addNotification('error', 'Erreur', 'Erreur lors de la mise à jour de l\'image');
+            require 'templates/update.php';
+            return;
+        }
+        $r = $bd->prepare("DELETE FROM taged WHERE imageId = :imageId");
+        $r->execute([':imageId' => $_POST['id']]);
+        if (!$r) {
+            addNotification('error', 'Erreur', 'Erreur lors de la mise à jour des tags');
+            require 'templates/update.php';
+            return;
+        }
+        foreach ($_POST['tags'] as $tag) {
+            // tag exist ???
+            $r = $bd->prepare("SELECT id FROM tag WHERE name = :name");
+            $r->execute([':name' => $tag]);
+            if (!$r) {
+                addNotification('error', 'Erreur', 'Erreur lors de la vérification des tags');
+                require 'templates/update.php';
+                return;
+            }
+            
+            if ($r->rowCount() > 0) {
+                $tag_id = $r->fetch()['id'];
+            } else {
+                // Tag dont exist
+                $r = $bd->prepare("INSERT INTO tag (name) VALUES (:name)");
+                $r->execute([':name' => $tag]);
+                if (!$r) {
+                    addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
+                    require 'templates/update.php';
+                    return;
+                }
+                $tag_id = $bd->lastInsertId();
+            }
+            $r = $bd->prepare("INSERT INTO taged (imageId, tagId) VALUES (:imageId, :tagId)");
+            $r->execute([
+                ':imageId' => $_POST['id'],
+                ':tagId' => $tag_id
+            ]);
+            if (!$r) {
+                addNotification('error', 'Erreur', 'Erreur lors de l\'ajout des tags');
+                require 'templates/update.php';
+                return;
+            }
+        }
+        addNotification('success', 'Succès', 'L\'image à été mise à jour');
+        if (isset($_POST['callback'])) {
+            header('Location: /' . $_POST['callback']);
+        } else {
+            header('Location: index.php');
+        }
+        exit();
+    }
+
+    if (isset($_GET['id'])) {
+        $bd = connect_db();
+        $r = $bd->prepare("
+        SELECT *
+        FROM image
+        WHERE id = :id AND userId = :sessionId
+        ");
+        $r->execute([
+            ':id' => $_GET['id'] ?? null, 
+            ':sessionId' => $_SESSION['user']
+        ]);
+        if ($r->rowCount() != 1) {
+            addNotification('error', 'Erreur', 'L\'image n\'existe pas ou vous n\'avez pas les droits pour la modifier');
+            if (isset($_POST['callback'])) {
+                header('Location: ' . $_POST['callback']);
+            } else {
+                header('Location: /index.php');
+            }
+            exit();
+        }
+        $info = $r->fetch();
+        $path = $info['path'];
+        $description = $info['description'];
+        $public = $info['public'];
+        $id = $info['id'];
+    
+        require 'templates/update.php';
+        return;
+    }
+
+    addNotification('error', 'Erreur', 'Aucune image spécifiée');
+    if (isset($_POST['callback'])) {
+        header('Location: /' . $_POST['callback']);
+    } else {
+        header('Location: /index.php');
+    }
+    return;
+
 }
 
 function image_delete () {
@@ -810,6 +1010,5 @@ function image_delete () {
     } else {
         header('Location: /index.php');
     }
-    exit();
     return;
 }

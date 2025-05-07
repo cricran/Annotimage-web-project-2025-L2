@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" type="image/png" href="../static/images/favicon.png">
+    <script src="http://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="../static/js/code.js" ></script>
+        <title>Annotimage - tags</title>
+</head>
+<body>
+    
+    <header>
+        <img id="logo" src="../static/images/favicon.png" alt="logo" onclick="window.location.href='/index.php'">
+        <form action="/index.php/search" id="searchBarTop">
+            <input type="search" placeholder="Images, #tags, @utilisateurs" id="q" name="q">
+        </form>
+
+                    <div class="buttons">
+                <a id="profile" href="/index.php/user?user=dfcgvbhjn">Mon profil</a>
+                <a id="settings" href="/index.php/settings?callback=index.php/search"><img src="../static/images/settings.svg" alt="settings"></a>
+            </div>
+            
+</header>
+    <section id="search">
+        <h1>Rechercher des images</h1>
+        <form action="">
+            <input type="search" placeholder="Images, #tags, @utilisateurs" id="q" name="q" value="">
+        </form>
+    </section>
+
+    <section id="image_grid">
+        <div class="grid">    <article id="49">
+        <div>
+            <img src="/image.php?image=49.png" alt="Tableau du cour de POO">
+        </div>
+        <h2>Tableau du cour de POO</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                            <a href="/index.php/tag?tag=cour">#cour</a>
+                    <a href="/index.php/tag?tag=poo">#poo</a>
+                    <a href="/index.php/tag?tag=tableau">#tableau</a>
+                    <a href="/index.php/tag?tag=toto">#toto</a>
+                </p>
+    </article>
+    <article id="36">
+        <div>
+            <img src="/image.php?image=36.png" alt="mon site">
+        </div>
+        <h2>mon site</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                            <a href="/index.php/tag?tag=cool">#cool</a>
+                    <a href="/index.php/tag?tag=projet">#projet</a>
+                    <a href="/index.php/tag?tag=web">#web</a>
+                </p>
+    </article>
+    <article id="35">
+        <div>
+            <img src="/image.php?image=35.png" alt="cour poo">
+        </div>
+        <h2>cour poo</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                            <a href="/index.php/tag?tag=exam">#exam</a>
+                    <a href="/index.php/tag?tag=java">#java</a>
+                    <a href="/index.php/tag?tag=poo">#poo</a>
+                </p>
+    </article>
+    <article id="32">
+        <div>
+            <img src="/image.php?image=32.png" alt="preimer teste 2 ?">
+        </div>
+        <h2>preimer teste 2 ?</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                            <a href="/index.php/tag?tag=gg">#gg</a>
+                </p>
+    </article>
+    <article id="28">
+        <div>
+            <img src="/image.php?image=28.png" alt="preimer teste 2 ?">
+        </div>
+        <h2>preimer teste 2 ?</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                            <a href="/index.php/tag?tag=ggg">#ggg</a>
+                    <a href="/index.php/tag?tag=prems">#prems</a>
+                    <a href="/index.php/tag?tag=toto">#toto</a>
+                </p>
+    </article>
+    <article id="29">
+        <div>
+            <img src="/image.php?image=29.png" alt="preimer teste 2 ?.">
+        </div>
+        <h2>preimer teste 2 ?.</h2>
+        <p><a href="/index.php/user?user=groultri">@groultri</a></p>
+        <p>
+                        </p>
+    </article>
+</div>    </section>
+
+    <section id="page_index">
+        <p><a href='?q=&page=1' class='page_select'>1</a><a href='?q=&page=2'>2</a></p>    </section>
+
+    </body>
+</html>

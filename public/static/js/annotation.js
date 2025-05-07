@@ -114,20 +114,10 @@ $(document).ready(function () {
             canvas.on('touchmove', draw);
             canvas.on('touchend', endDrawing);
 
-
-
-
         });
         if (image[0].complete) {
             image.trigger('load');
         }
-
-
     });
-
-
-
-
-
 
 });

@@ -28,6 +28,8 @@ if ($request == '/index.php' || $request == '/') {
     annotation();
 } elseif ($request == '/index.php/delete-image') {
     image_delete();
+} elseif ($request == '/index.php/update') {
+    update();
 } else {
     header('HTTP/1.1 404 Not Found');
     echo '<html><body><h1>Page introuvable</h1></body></html>';

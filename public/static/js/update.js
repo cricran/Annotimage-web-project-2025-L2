@@ -1,21 +1,18 @@
-function previewImage() {
-    const file = $('input[type=file]')[0].files[0];
-    const preview = $('#imagePreview');
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.attr('src', e.target.result).show();
-        };
-        reader.readAsDataURL(file);
-    }
-}
 $(document).ready(function () {
-    $('#fileInput').on('change', function () {
-        previewImage();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let id = urlParams.get('id');
+
+    $.getJSON(`/imageInfo.php?id=${id}`, function (json) {
+        json['tags'].forEach(function (tag) {
+            addTagList(tag['name'], '#selected_tag');
+        });
     });
+
     $('form').on('submit', function (event) {
         event.preventDefault();
     });
+
     $('#add_tag').on('click', function (event) {
         var name = $('#name_add_tag').val();
         if (name !== "") {
@@ -23,6 +20,7 @@ $(document).ready(function () {
         }
         $('#name_add_tag').val('');
     });
+
     $('input[type="submit"]').on('click', function (event) {
         let now = new Date();
         let formattedDate = now.getFullYear() + '-' +
@@ -34,6 +32,7 @@ $(document).ready(function () {
         $("form").append('<input type="hidden" name="date" id="date" value="' + formattedDate + '">')
         $(event.target).closest("form").off('submit').submit();
     });
+
     $('#name_add_tag').on('keypress', function (event) {
         if (event.which == 13) {
             event.preventDefault();
@@ -44,4 +43,5 @@ $(document).ready(function () {
             $(this).val('');
         }
     });
+
 });

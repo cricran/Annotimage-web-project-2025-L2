@@ -155,7 +155,7 @@ function showImage(id) {
         `
         if (data['is_owner']) {
             contenue += `
-            <a href=""><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
+            <a href="/index.php/update?id=${id}"><img src="../static/images/edit.svg" alt="modifier image" title="Modifier l'image"></a>
             <a href=""><img src="../static/images/del.svg" alt="suprimer image" id="img_del" title="Suprimer l'image"></a>
             <a href="/index.php/annotation?id=${id}"><img src="../static/images/annot.svg" alt="ajouter/modifier annotations" title="Ajouter/modifier les annotations"></a>
             `
@@ -206,11 +206,9 @@ function showImage(id) {
 
 // showAnnotations : Affiche les annotations annotations dans la zonne annotZonneSelector pour l'image imageSelector
 function showAnnotations(annotations, annotZonneSelector, imageSelector) {
-    console.log('toto');
     let annotZonne = $(annotZonneSelector);
     let image = $(imageSelector);
     image.on('load', function () {
-        console.log(annotations, 'toto');
         let imageDimensions = {
             width: image.width(),
             height: image.height()
@@ -268,10 +266,8 @@ function showAnnotations(annotations, annotZonneSelector, imageSelector) {
 }
 
 function showAnnotationsNoWait(annotations, annotZonneSelector, imageSelector, imageDimensions, realImageDimensions) {
-    console.log('toto');
     let annotZonne = $(annotZonneSelector);
     let image = $(imageSelector);
-    console.log(annotations, 'toto');
 
     annotations.forEach(function (annotation) {
         let div = $('<div class="annot"></div>');
