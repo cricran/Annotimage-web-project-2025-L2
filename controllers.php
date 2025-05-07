@@ -433,7 +433,7 @@ function upload() {
 
 function tag() {
     session_start();
-    $limit = 12;
+    $limit = 9;
     $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
     $offset = ($page - 1) * $limit;
     $tag = isset($_GET['tag']) ? $_GET['tag'] : "";
@@ -501,7 +501,7 @@ function tag() {
 
 function user() {
     session_start();
-    $limit = 12;
+    $limit = 9;
     $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
     $offset = ($page - 1) * $limit;
     $user = isset($_GET['user']) ? $_GET['user'] : "";
@@ -562,7 +562,7 @@ function user() {
 
 function search() {
     session_start();
-    $limit = 6;
+    $limit = 9;
     $page = isset($_GET['page']) && ctype_digit($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
     $offset = ($page - 1) * $limit;
     $query = isset($_GET['q']) ? trim($_GET['q']) : "";

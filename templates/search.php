@@ -8,7 +8,7 @@
     <section id="search">
         <h1>Rechercher des images</h1>
         <form action="">
-            <input type="search" placeholder="Images, #tags, @utilisateurs" id="q" name="q" value="<?= $_GET['q'] ?? '' ?>">
+            <input type="search" placeholder="Images, #tags, @utilisateurs" id="q" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
         </form>
     </section>
 

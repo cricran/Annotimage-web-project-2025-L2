@@ -133,7 +133,7 @@ function showImage(id) {
         var tagsList = "Aucun";
         if (data['tags'] && data['tags'].length !== 0) {
             tagsList = data['tags']
-                .map(tag => `<a href="/index.php/tag?tag=${encodeURIComponent(tag['name'])}">#${tag['name']}</a>`)
+                .map(tag => `<a href="/index.php/tag?tag=${encodeURIComponent(tag['name'])}">#${escapeHtml(tag['name'])}</a>`)
                 .join(', ');
         }
 
@@ -142,12 +142,12 @@ function showImage(id) {
             <button id="cancel"><img src="../static/images/close.svg" alt="close" title="Fermer"></button>
             <diV>
                 <div id="imgZonne">
-                    <img src="/image.php?image=${data['image']['path']}" alt="${data['image']['description']}" id="imgZonne_img">
+                    <img src="/image.php?image=${data['image']['path']}" alt="${escapeHtml(data['image']['description'])}" id="imgZonne_img">
                     <div class="tooltip" id="annotation-tooltip"></div>
                 </div>
                 <div>
-                    <h2>${data['image']['description']}</h2>
-                    <p>Utilisateur : <a href="/index.php/user?user=${data['image']['user']['username']}">@${data['image']['user']['username']}</a></p>
+                    <h2>${escapeHtml(data['image']['description'])}</h2>
+                    <p>Utilisateur : <a href="/index.php/user?user=${data['image']['user']['username']}">@${escapeHtml(data['image']['user']['username'])}</a></p>
                     <p>Tags : ${tagsList}</p>
                 </div>
             </div>
@@ -243,7 +243,7 @@ function showAnnotations(annotations, annotZonneSelector, imageSelector) {
                     tooltip = $('<div id="annotation-tooltip" class="tooltip"></div>');
                     $('body').append(tooltip);
                 }
-                tooltip.text(annotation['description']);
+                tooltip.text(escapeHtml(annotation['description']));
                 tooltip.css({
                     visibility: 'visible',
                     opacity: 1,
@@ -322,9 +322,9 @@ function showAnnotationsNoWait(annotations, annotZonneSelector, imageSelector, i
 function addTagList(name, place) {
     var content = `
     <div>
-        <span>${name}</span>
+        <span>${escapeHtml(name)}</span>
         <button><img src="../static/images/close.svg" alt="suprimer"></button>
-        <input type="hidden" name="tags[]" id="tags" value="${name}">
+        <input type="hidden" name="tags[]" id="tags" value="${escapeHtml(name)}">
     </div>
     `;
     $(place).prepend(content);
@@ -339,9 +339,9 @@ function addTagList(name, place) {
 function addAnnotList(name, place, value) {
     var content = `
     <div>
-        <span>${name}</span>
+        <span>${escapeHtml(name)}</span>
         <button><img src="../static/images/close.svg" alt="suprimer"></button>
-        <input type="hidden" name="annot[]" value='${value.replace(/'/g, "&#39;")}'>
+        <input type="hidden" name="annot[]" value='${escapeHtml(value)}'>
     </div>
     `;
     $(place).prepend(content);
@@ -359,4 +359,19 @@ function translatePoint(point, srcRect, destRect) {
         x: (point.x * (destRect.width / srcRect.width)),
         y: (point.y * (destRect.height / srcRect.height))
     };
+}
+
+// Tools
+
+// escapeHTML : Prends en paramètre une chaine de caractère text et renvoie cette même chaine avec les
+//  caractères spéciaux HTML échapés
+function escapeHtml(text) {
+    var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function (m) { return map[m]; });
 }
