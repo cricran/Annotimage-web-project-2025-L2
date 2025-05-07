@@ -272,13 +272,13 @@ function settings() {
             return;
         }
 
-        $r_delete_unused_tags = $bd->prepare("
+        $r_tag = $bd->prepare("
         DELETE FROM tag 
         WHERE id NOT IN (
             SELECT DISTINCT tagId 
             FROM taged
         )");
-        $r_delete_unused_tags->execute();
+        $r_tag->execute();
 
         $_SESSION['user'] = null;
         addNotification('info', 'Information', 'Compte supprimé avec succès');
