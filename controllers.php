@@ -298,7 +298,7 @@ function upload() {
     if (isset($_POST['envoyer'])) {
 
         if(!isset($_POST['description']) || !isset($_POST['date'])) {
-            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image 0');
+            addNotification('error', 'Erreur', 'Erreur lors de l\'ajout de l\'image ');
             require 'templates/upload.php';
             return;
         }
@@ -334,8 +334,14 @@ function upload() {
                 }
                 
                 if ($f_type !== 'png' && $f_type !== 'jpeg' && $f_type !== 'jpg' && $f_type !== 'webp') {
-                    addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpeg (jpeg) ou webp. Vous aves donné : ' . $f_type);
+                    addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpg (jpeg) ou webp. Vous aves donné : ' . $f_type);
                     $issue = true;
+                } else {
+                    $type = exif_imagetype($_FILES['fileInput']['tmp_name']);
+                    if ($type !== IMAGETYPE_PNG && $type !== IMAGETYPE_JPEG && $type !== IMAGETYPE_WEBP) {
+                        addNotification('error', 'Erreur', 'L\'image doit être aux format suivant : png, jpg (jpeg) ou webp. Vous aves donné une image non valide');
+                        $issue = true;
+                    }
                 }
             }
         }
