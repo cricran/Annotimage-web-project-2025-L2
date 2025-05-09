@@ -11,7 +11,7 @@ Les requêtes pour créer les tables nécessaires sont données dans le fichier 
 
 La configuration de l'accès à la base de données se fait dans le fichier `config.php`.
 
-Pour obtenir une version de démonstration avec des utilisateurs et des images déjà ajoutés, exécutez les requêtes contenues dans `demo.sql`.
+Pour obtenir une version de démonstration avec des utilisateurs et des images déjà ajoutés, exécutez les requêtes contenues dans `demo.sql`. (le nom d'utilisateur et le mot de passe sont identique)
 
 ## Droits d'accès
 
