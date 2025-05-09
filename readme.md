@@ -3,15 +3,15 @@ L2 Info
 
 Langage Web
 
-Tristan GROULT - TP1
+Tristan GROULT - TP2
 
 ## Base de données :
 
-Les requêtes pour créer les tables nécessaires sont données dans le fichier `db.sql`.
+Les requêtes pour créer uniquement les tables nécessaires sont données dans le fichier `db.sql`.
 
 La configuration de l'accès à la base de données se fait dans le fichier `config.php`.
 
-Pour obtenir une version de démonstration avec des utilisateurs et des images déjà ajoutés, exécutez les requêtes contenues dans `demo.sql`. (le nom d'utilisateur et le mot de passe sont identique)
+Pour obtenir une version de démonstration avec des utilisateurs et des images déjà ajoutés, exécutez les requêtes contenues dans `demo.sql`. (lors de la connexion, le nom d'utilisateur et le mot de passe sont identique)
 
 ## Droits d'accès
 
