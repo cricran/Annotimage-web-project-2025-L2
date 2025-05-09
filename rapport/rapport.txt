@@ -1,0 +1,201 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{graphicx, float, svg} 
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+\usepackage[listings,skins]{tcolorbox}
+\usepackage{xcolor}
+
+\usepackage[hyphens]{url}
+\usepackage[pdfauthor = {{Prénom Nom}}, pdftitle = {{Titredocument}},pdfstartview = Fit, pdfpagelayout =
+SinglePage, pdfnewwindow = true, bookmarksnumbered =
+true, breaklinks, colorlinks, linkcolor = red, urlcolor =
+black, citecolor = cyan, linktoc = all]{hyperref}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codeblue}{rgb}{0.0, 0.4, 0.8}
+\definecolor{darkWhite}{rgb}{0.90,0.90,0.90}
+
+\lstdefinestyle{bigCode}{
+    backgroundcolor=\color{darkWhite},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=bash,
+    morekeywords={free,malloc,nullptr,calloc,memcpy,realloc,bool,size_t,true,false}
+}
+
+\lstset{style=bigCode}
+
+\NewTotalTCBox{\commandbox}{ s v }
+{verbatim,colupper=black,colback=darkWhite!75!white,colframe=white,left=0pt,boxsep=0px,right=0pt,top=2px,bottom=2px}
+{\IfBooleanT{#1}{\textcolor{red}{\ttfamily\bfseries > }}%
+\lstinline[language=php,morekeywords={free,malloc,nullptr,calloc,memcpy,realloc,bool,size_t,true,false},keywordstyle=\color{codeblue}\bfseries]^#2^}
+
+\newcommand{\code}{\commandbox}
+
+\title{Rapport projet de langages Web}
+\author{Tristan GROULT}
+\date{\today}
+
+\begin{document}
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{logo_univ.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=1\textwidth]{ufr_logo.png}
+    \end{minipage}
+\end{figure}
+
+\maketitle
+
+\clearpage\setcounter{page}{2}
+
+{
+\hypersetup{hidelinks} % Sommaire en "noir"
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents % Affichage du sommaire
+}
+
+\clearpage
+
+\section{Introduction}
+
+Ce projet vise à la création d'une application web avec des utilisateurs ayant la possibilité d'ajouter des images sur le site. Les images peuvent être annotées et taguées afin de créer des catégories et d'indiquer sur l'image des éléments. Pour ce projet, j'ai décider de nomé le l'application \og Annotimage \fg.
+
+\section{Structure du projet}
+
+Ce projet se base sur l'architecture \textit{Modèle-Vue-Contrôleure} (MVC) \autoref{fig:structure_projet}. La racine du projet, pour le serveur, se situe dans le dossier \code{public/} qui contient le fichier \code{index.php} qui fait office de fichier \og route \fg permettant la redirection des requêtes à leurs bonne destination. Le fichier \code{models.php} contient la partie modèle de cette architecture et permet de regrouper les fonctions étant utilisées à plusieurs endroits. Le dossier \code{templates/} contient quant à lui les différentes vues pour ce projet.
+
+\begin{figure}[h]
+\centering
+\begin{tcolorbox}[center upper,
+    enhanced,
+    colback=darkWhite,
+    boxrule=0pt,
+    frame hidden,
+    width=0.6\textwidth]
+\begin{verbatim}
+    .
+    |-- config.php
+    |-- controllers.php
+    |-- debug.php
+    |-- images/
+    |-- models.php
+    |-- public/
+    |   |-- imageInfo.php
+    |   |-- image.php
+    |   |-- index.php
+    |   `-- static/
+    |       |-- css/
+    |       |-- fonts/
+    |       |-- images/
+    |       `-- js/
+    |-- readme.md
+    `-- templates/
+\end{verbatim}
+\end{tcolorbox}
+    \caption{Structure du projet}
+    \label{fig:structure_projet} 
+\end{figure}
+
+Pour permettre la protection des données ainsi que d'empêcher les utilisateurs ou toute personne mal intentionnée d'accéder à des informations aux qu'elles elle ne sont pas censées accéder, la racine du projet se situe dans le dossier \code{public/}. Cela assure que seules les ressources disponibles dans ce fichier sont accessibles.
+Le dossier \code{public/} contient :
+
+\begin{itemize}
+    \item Les fichiers \code{image.php} repectivement \code{imageInfo.php} permettent d'accéder à une image respectivement toutes les informations (au format \code{json}) d'une image en vérifiant au préalable les droits d'acces à cette image pour l'utilisateur courrant. Cet accès se fait respectivement grâce au nom de l'image et grâce à l'ID de l'image.
+    \item Le dossier \code{static/} contient toutes les ressources statiques utilisées par le site. Cela inclut les images et illustrations, le style CSS, les polices d'écriture ainsi que le code javascript. Les fichiers javascript sont regroupés au sein du dossier \code{js/}. \code{code.js} regroupe les fonctions utilitaires pouvant être utilisées par différentes pages ainsi que le fonctionnement de base de toutes page. Cependant, chaque page ayant besoin d'un code javascript qui lui est propre a un fichier javascript associé pour cella. 
+\end{itemize}
+
+
+Le fichier \code{config.php} contient la configuration nécessaire à la connexion à la base de données. Le fichier \code{debug.php} permet quant à lui d'activer ou de désactiver les options de débogage selon que le site soit en développement ou non. Pour finir, le fichier \code{controler.php} contient toutes les fonctions vers lequel \code{index.php} rediriges les utilisateurs. Ces fonctions permettent l'affichage correct des vues ainsi que le traitement des formulaires. 
+
+L'ensemble des images des utilisateurs sont stocké dans le dossier \code{images/}. Toutes les images sont tout d'abord renommées avant d'être ajouter afin d'éviter les doublons. 
+
+\section{Problèmes rencontrées}
+
+\subsection{Les images}
+
+\subsubsection{Ajout}
+
+Lors de l'ajout des images, une attention particulière est portée sur le fait que les fichiers envoyés soient des images correctes. Cependant, ce n'est pas suffisant, il faut aussi que les fichiers images ne portent pas des noms identiques pour éviter tout problème de fichiers écrasés et donc d'images qui disparaissent. Pour cela, une requête est d'abord faite vers la base SQL pour ajouter les informations connues de l'image, l'identifiant unique qui est la clé primaire de la table image est ensuite récupérée pour renommer l'image qui vient d'être ajoutée. Cela permet de garantir un nom unique pour l'image qui vient d'être ajoutée. La base de données étant ensuite mise à jour avec le chemin vers cette image.
+
+\subsubsection{Accès}
+
+Les images pouvant être publiques comme privées, un accès spécifique doit être développé afin d'empêcher les utilisateurs d'accéder à toutes les images. Pour cela, j'utilise le fichier \code{image.php} qui me permet avec une requête de la forme \code{/image?id=nom.png} d'accéder à l'image \code{nom.png}. Pour cela, le fichier PHP fait une requête vers la base de données pour vérifier que l'image existe. Si elle existe, il vérifie qu'elle est soit public, soit privé et dans ce cas-là, si l'utilisateur connecté correspond à l'utilisateur qui a déposé cette image. Le code prossède ensuite à l'envoi de l'image grâce à la fonction \code{header('Content-Type: image/' . fileType)}.
+
+Un problème c'est aussi posé sur les formats des images. Nous prenons donc en charge 3 formats d'images, le \code{jpeg}, le \code{png} et le \code{webp} car les images doivent être ouvert avec une fonction spécifique à leur format et la fonction \code{header} doit être appelée avec le \code{fileType} de l'image envoyé.
+
+\subsection{Les annotations}
+
+Les annotations sont des rectangles qui sont spécifiées grâce à 2 points avec leurs coordonnées X et Y représentant 2 coins opposé du rectangle. Les images pouvant avoir des dimensions variées et l'affichage des images pouvant se faire sur des périphérique de taille différentes. Une translation des points doit être appliquée afin que les annotations apparaissent toujours au même endroit. Dans les faits, Lorsqu'un utilisateur annote une image, il sélectionne une zone sur l'image affichée sur son périphérique. Connaissant la taille de l'image affichée ainsi que la taille réelle de l'image, Nous pouvons convertir les coordonnées des 2 points sélectionnés par l'utilisateur en coordonner équivalente sur l'image d'origine. Pour l'affichage, il suffit donc de reconvertir les coordonnées données sur la taille d'images originales en coordonnées sur l'image affichée sur le périphérique du client. 
+L'entireté de ces actions est gérée par javascript pour que l'affichage chez le client soit dynamique.
+
+\subsection{Les modifications d'images et d'annotations}
+
+La gestion des tags des images ainsi que des annotations étant dynamiques et gérée par javascript, le chargement d'images déjà ajouté pour les modifier doit pouvoir garder le fonctionnement dynamique. Il est donc impossible de charger les annotations et tags directement en PHP. Pour cela, lorsqu'une image doit être modifiée, le code javascript fait une requête vers le serveur pour demander les informations d'une image grâce à la requête \code{/imageIngo.php?id=nb} où \code{nb} représente l'identifiant de l'image. La réponse du serveur est alors du json contenant les informations de l'image qui peut être ensuite annalysé en javascript. Après cela, comme pour l'ajout manuelle des tags et des annotations qui auraient put être faits par l'utilisateur, les annotations et tags sont ajoutées permettant la gestion dynamique de ces éléments.
+
+\section{Améliorations}
+
+Les améliorations suivantes ont été ajoutées au projet :
+
+\begin{itemize}
+    \item Pour l'ensemble des images, l'utilisateur déposant une image a l'opportunité de déposer avec des tags permettant d'asscié autant de catégories qu'ils veulent à une image et donc de regrouper les images aussi entre elle.
+    
+    \item Toutes les entrées utilisateurs sont sanitarisées afin qu'aucun code PHP ou HTML ne puisse être exécuté.
+    
+    \item Les images déposées sont rigoureusement vérifiées pour être sûr qu'elles vérifient bien le statut d'image.
+    
+    \item Les mots de passe sont stockés sous forme de hashs pour plus de sécurité.
+    
+    \item Un système de notification permettant dans PHP d'ajouter des informations à afficher à leurs utilisateurs afin que celui ci puisse savoir les erreurs ou les informations sur ce qui vient d'arriver. Les notifications s'affichent quelques secondes, puis disparaissent où l'utilisateur peut les fermer de lui même.
+    
+    \item Lorsque c'est possible, un système de \og callback \fg est utilisé permettant à l'utilisateur lorsqu'il ferme une page ou après avoir ajouté ou modifié une image d'être redirigé vers la page depuis laquelle il a accédé à cette ressource.
+    
+    \item Une page paramètres dans laquelle les utilisateurs peuvent:
+    \begin{itemize}
+        \item Modifiez les informations de leur compte en modifiant l'adresse e mail ou le nom d'utilisateur qui leur est associé. Les utilisateurs peuvent aussi modifier leur mot de passe. 
+        \item Supprimmer leur compte en supprimant toutes les images et annotations associées au compte
+        \item Se déconnecter.
+    \end{itemize}
+
+    \item Une page de mise à jour permettant de mettre à jour les informations d'une image incluant la description, les tags qui leur est associés ainsi que sa visibilité.
+    
+    \item Une amélioration à la page annotation qui permet aussi de continuer l'anotation d'une image ayant déjà été annotée ainsi que de supprimer les notations ayant déjà été ajoutées.
+    
+    \item Une page permettant l'affichage de toutes les images présentant un tag spécifié.
+    
+    \item Une option permettant de supprimer une image ayant été ajoutée par un utilisateur.
+    
+    \item Une option permettant d'afficher et de cacher les annotations présentes sur une image.
+    
+    \item Une option de recherche permettant de rechercher un utilisateur en préfixant le mot d'un arobase permettant aussi de rechercher des tags en le préférant d'un dièse et permettant de rechercher des mots présents dans la description en ne le préfixant pas. L'ensemble de ces éléments peuvent être recherchés en même temps et seront traités comme une conjonction de disjonction selon leur type.
+    
+    \item L'entièreté du site est \og responsive \fg et peut donc être utilisée à la fois sur PC et sur mobile.
+\end{itemize}
+
+\end{document}
