@@ -62,8 +62,7 @@ $response = [
         'public' => (bool)$image['public'],
         'date' => $image['date'],
         'user' => [
-            'username' => $image['username'],
-            'email' => $image['email']
+            'username' => $image['username']
         ]
     ],
     'tags' => $tags,

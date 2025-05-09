@@ -149,6 +149,11 @@ function showImage(id) {
                     <h2>${escapeHtml(data['image']['description'])}</h2>
                     <p>Utilisateur : <a href="/index.php/user?user=${data['image']['user']['username']}">@${escapeHtml(data['image']['user']['username'])}</a></p>
                     <p>Tags : ${tagsList}</p>
+                    <p>Dernière modification le : ${new Date(data['image']['date']).toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        })}</p>
                 </div>
             </div>
             <div>
